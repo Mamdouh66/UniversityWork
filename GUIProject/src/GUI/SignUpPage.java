@@ -5,13 +5,20 @@ import App.Customer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
+import java.sql.*;
+import java.security.Key;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+import java.util.Base64;
+
+
 
 public class SignUpPage extends javax.swing.JFrame {
-
+    
+    Connection connection;
     public SignUpPage() {
         initComponents();
     }
-
     // checks if password is powerful
     public static boolean isPasswordPowerful(String password) {
         // Define the rules for a powerful password
@@ -233,7 +240,22 @@ public class SignUpPage extends javax.swing.JFrame {
             if(passwordIsPowerful && emailValid && emptyValid && phoneValid &&firstName.matches("^[a-zA-Z]*$") &&lastName.matches("^[a-zA-Z]*$")){
                 Customer currentUser = new Customer(firstName, lastName, new String(password), email, phoneNumber, username);                
                 
-                // 
+                // pushing elemetnts to the database
+                try{
+                    connectToDB();
+                    PreparedStatement st =  connection.prepareStatement("INSERT INTO flyout.passengers (passengerUsername, passengerPassword, passengerEmail, passengerFirstName, passengerLastName, passengerPhone, passengerWallet, passengerHistory) VALUES (?,?,?,?,?,?,?,?)");
+                    st.setString(1, username);
+                    st.setString(2, new String(password));
+                    st.setString(3, email);
+                    st.setString(4, firstName);
+                    st.setString(5, lastName);
+                    st.setString(6, phoneNumber);
+                    st.setDouble(7, 0.0);
+                    st.setString(8, "You created an accound with Flyout,");
+                } catch(SQLException e){
+                    System.out.println("Error in pushing data for regesiteration");
+                    e.printStackTrace();
+                }
                 customerDashboard p = new customerDashboard(currentUser);
                 p.setVisible(true);
                 dispose();
@@ -241,7 +263,43 @@ public class SignUpPage extends javax.swing.JFrame {
         }
         }
     }//GEN-LAST:event_signUpButtonActionPerformed
+    
+    // encrypt password
+    private static final String ALGO = "AES";
+    private static final byte[] keyValue =
+            new byte[] {'T', 'h', 'e', 'B', 'e', 's', 't',
+                    'S', 'e', 'c', 'r','e', 't', 'K', 'e', 'y'};
 
+    public static String encrypt(String data) throws Exception {
+        Key key = generateKey();
+        Cipher c = Cipher.getInstance(ALGO);
+        c.init(Cipher.ENCRYPT_MODE, key);
+        byte[] encVal = c.doFinal(data.getBytes());
+        return Base64.getEncoder().encodeToString(encVal);
+    }
+    private static Key generateKey() throws Exception {
+        return new SecretKeySpec(keyValue, ALGO);
+    }
+    
+    public void connectToDB(){
+       try{
+       connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/flyout?zeroDateTimeBehavior=CONVERT_TO_NULL",
+               "root", "1234");
+       System.out.println("Connected");
+       } catch(SQLException e){
+           System.out.println("Unable to connect");
+           e.printStackTrace();
+       }
+    } 
+    public void disconnectFromDB() {
+    try {
+      connection.close();
+      System.out.println("Disconnected");
+    } catch (SQLException e) {
+      System.out.println("Unable to disconnect");
+      e.printStackTrace();
+    }
+  }
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
         // TODO add your handling code here:
         mainLoginPage p = new mainLoginPage();
