@@ -256,6 +256,7 @@ public class SignUpPage extends javax.swing.JFrame {
                     st.setDouble(7, 0.0);
                     st.setString(8, "You created an accound with Flyout,");
                     st.executeUpdate();
+                    System.out.println("Informations have been sent successfully");
                 } catch(SQLException e){
                     System.out.println("Error in pushing data for regesiteration");
                     e.printStackTrace();

@@ -8,6 +8,9 @@ import javax.swing.JOptionPane;
 import javax.swing.*;
 import java.awt.event.*;
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import App.*;
 
 
 /**
@@ -26,6 +29,7 @@ public class mainLoginPage extends javax.swing.JFrame {
     private Timer timer;
     private Timer timer1;
     Connection connection;
+    Customer customer;
     
     String DatabaseURL = "jdbc:mysql://localhost:3306/flyout?zeroDateTimeBehavior=CONVERT_TO_NULL";
     String databaseUsername = "root";
@@ -253,16 +257,32 @@ public class mainLoginPage extends javax.swing.JFrame {
           else if (evt.getSource() == signInButton) {
             String usernameVal = usernameTextField.getText();
             char[] passwordVal = passwordTextField.getPassword();
-          
-            // check if username and password match the stored values
-                 if (username.equals("admin") && new String(passwordVal).equals("password")) {
-//                JOptionPane.showMessageDialog(null, "Login successful!");
-                customerDashboard p = new customerDashboard();
-                p.setVisible(true);
-                dispose();
-            } else {
-                JOptionPane.showMessageDialog(null, "Invalid username or password.");
+            boolean isHe = false;
+            connectToDB();
+            try {
+                Statement st = connection.createStatement();
+                String query = "SELECT * FROM passengers WHERE passengerUsername = '" + username + "'";
+                ResultSet resultSet = st.executeQuery(query);
+                if (resultSet.next()) {
+                customer.setUsername(resultSet.getString("passengerUsername"));
+                customer.setPassword(resultSet.getString("passengerPassword"));
+                // check if username and password match the stored values
+                if (username.equals(customer.getUsername()) && new String(passwordVal).equals(customer.getPassword())) {
+    //                JOptionPane.showMessageDialog(null, "Login successful!");
+                        customerDashboard p = new customerDashboard();
+                        p.setVisible(true);
+                        dispose();
+                    } else {
+                    JOptionPane.showMessageDialog(null, "Invalid username or password.");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "username was not found");
+                    System.out.println("User not found");
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(mainLoginPage.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
         
         
         }
