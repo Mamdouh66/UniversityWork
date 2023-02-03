@@ -10,6 +10,8 @@ import java.security.Key;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import java.util.Base64;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 
@@ -245,17 +247,21 @@ public class SignUpPage extends javax.swing.JFrame {
                     connectToDB();
                     PreparedStatement st =  connection.prepareStatement("INSERT INTO flyout.passengers (passengerUsername, passengerPassword, passengerEmail, passengerFirstName, passengerLastName, passengerPhone, passengerWallet, passengerHistory) VALUES (?,?,?,?,?,?,?,?)");
                     st.setString(1, username);
-                    st.setString(2, new String(password));
+                    String encryptedPassword = encrypt(new String(password));
+                    st.setString(2, encryptedPassword);
                     st.setString(3, email);
                     st.setString(4, firstName);
                     st.setString(5, lastName);
                     st.setString(6, phoneNumber);
                     st.setDouble(7, 0.0);
                     st.setString(8, "You created an accound with Flyout,");
+                    st.executeUpdate();
                 } catch(SQLException e){
                     System.out.println("Error in pushing data for regesiteration");
                     e.printStackTrace();
-                }
+                }   catch (Exception ex) {
+                        Logger.getLogger(SignUpPage.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 customerDashboard p = new customerDashboard(currentUser);
                 p.setVisible(true);
                 dispose();
@@ -263,7 +269,7 @@ public class SignUpPage extends javax.swing.JFrame {
         }
         }
     }//GEN-LAST:event_signUpButtonActionPerformed
-    
+
     // encrypt password
     private static final String ALGO = "AES";
     private static final byte[] keyValue =
@@ -271,13 +277,18 @@ public class SignUpPage extends javax.swing.JFrame {
                     'S', 'e', 'c', 'r','e', 't', 'K', 'e', 'y'};
 
     public static String encrypt(String data) throws Exception {
+        try {
         Key key = generateKey();
         Cipher c = Cipher.getInstance(ALGO);
         c.init(Cipher.ENCRYPT_MODE, key);
         byte[] encVal = c.doFinal(data.getBytes());
         return Base64.getEncoder().encodeToString(encVal);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return data;
+        }
     }
-    private static Key generateKey() throws Exception {
+    private static Key generateKey(){
         return new SecretKeySpec(keyValue, ALGO);
     }
     
