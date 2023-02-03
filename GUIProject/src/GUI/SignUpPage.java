@@ -232,6 +232,8 @@ public class SignUpPage extends javax.swing.JFrame {
             // if everything is true then, do the following
             if(passwordIsPowerful && emailValid && emptyValid && phoneValid &&firstName.matches("^[a-zA-Z]*$") &&lastName.matches("^[a-zA-Z]*$")){
                 Customer currentUser = new Customer(firstName, lastName, new String(password), email, phoneNumber, username);                
+                
+                // 
                 customerDashboard p = new customerDashboard(currentUser);
                 p.setVisible(true);
                 dispose();

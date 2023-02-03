@@ -7,6 +7,8 @@ package GUI;
 import javax.swing.JOptionPane;
 import javax.swing.*;
 import java.awt.event.*;
+import java.sql.*;
+
 
 /**
  *
@@ -24,7 +26,12 @@ public class mainLoginPage extends javax.swing.JFrame {
     private Timer timer;
     private Timer timer1;
     
+    String DatabaseURL = "jdbc:mysql://localhost:3306/flyout?zeroDateTimeBehavior=CONVERT_TO_NULL";
+    String databaseUsername = "root";
+    String databasePassword = "1234";
+    
     public mainLoginPage() {
+        connectToDB();
         text = "Welcome to flyout";
         index = 0;
         timer = new Timer(150, new ActionListener() {
@@ -49,7 +56,6 @@ public class mainLoginPage extends javax.swing.JFrame {
                     index1++;
                 } else {
                     timer1.stop();
-                    
                 }
             }
         });
@@ -57,6 +63,15 @@ public class mainLoginPage extends javax.swing.JFrame {
         initComponents();
     }
 
+    public void connectToDB(){
+       try{
+       Connection conn = DriverManager.getConnection(DatabaseURL, databaseUsername, databasePassword);
+       System.out.println("Connected");
+       } catch(SQLException e){
+           System.out.println("Unable to connect");
+           e.printStackTrace();
+       }
+    } 
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
