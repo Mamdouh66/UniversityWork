@@ -3,7 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package GUI;
-import App.Customer;
+import App.*;
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JLabel;
@@ -12,6 +13,7 @@ import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.Locale;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 /**
  *
  * @author zuchv
@@ -30,15 +32,16 @@ public class customerDashboard extends javax.swing.JFrame {
     private Timer timer1;
     
     // date place
-        LocalDate currentDate = LocalDate.now();
-        String dayOfWeek = currentDate.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.ENGLISH);
-        String month = currentDate.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH);
-        int dayOfMonth = currentDate.getDayOfMonth();
-        int year = currentDate.getYear();
-        String date = month.substring(0, 3) + "/" + dayOfMonth + "/" + year;
-        String day = dayOfWeek;
-        
-        Customer currentCustomer;
+    LocalDate currentDate = LocalDate.now();
+    String dayOfWeek = currentDate.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.ENGLISH);
+    String month = currentDate.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH);
+    int dayOfMonth = currentDate.getDayOfMonth();
+    int year = currentDate.getYear();
+    String date = month.substring(0, 3) + "/" + dayOfMonth + "/" + year;
+    String day = dayOfWeek;
+
+   Customer currentCustomer;
+   private JScrollPane scrollPane;
         
     
     public customerDashboard(){
@@ -57,6 +60,7 @@ public class customerDashboard extends javax.swing.JFrame {
                     index++;
                 } else {
                     timer.stop();
+                    printActivities(currentCustomer.getHistoryString());
                     jLabel4.setText(day);
                     jLabel5.setText(date);
                     timer1.start();
@@ -76,7 +80,6 @@ public class customerDashboard extends javax.swing.JFrame {
                 }
             }
         });
-        
         
         
         initComponents();
@@ -108,12 +111,13 @@ public class customerDashboard extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
+        actString1 = new javax.swing.JLabel();
+        actString2 = new javax.swing.JLabel();
+        actString3 = new javax.swing.JLabel();
+        actString4 = new javax.swing.JLabel();
+        actString7 = new javax.swing.JLabel();
+        actString6 = new javax.swing.JLabel();
+        actString5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -140,7 +144,7 @@ public class customerDashboard extends javax.swing.JFrame {
                 logoutButtonActionPerformed(evt);
             }
         });
-        darkLabelCustomer.add(logoutButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 650, 140, 40));
+        darkLabelCustomer.add(logoutButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 660, 140, 40));
 
         walletButton.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         walletButton.setForeground(new java.awt.Color(223, 223, 223));
@@ -242,35 +246,33 @@ public class customerDashboard extends javax.swing.JFrame {
 
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel7.setBackground(new java.awt.Color(153, 153, 153));
-        jLabel7.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
-        jLabel7.setText("- You created an account with Flyout");
-        jPanel2.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 360, 430, 60));
+        actString1.setBackground(new java.awt.Color(153, 153, 153));
+        actString1.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
+        jPanel2.add(actString1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, 610, 60));
 
-        jLabel8.setBackground(new java.awt.Color(153, 153, 153));
-        jLabel8.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
-        jLabel8.setText("- You booked an air flight to Riyadh at Sunday");
-        jPanel2.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 50, 430, 60));
+        actString2.setBackground(new java.awt.Color(153, 153, 153));
+        actString2.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
+        jPanel2.add(actString2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, 590, 60));
 
-        jLabel9.setBackground(new java.awt.Color(153, 153, 153));
-        jLabel9.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
-        jLabel9.setText("- You added 2500 Riyals to your wallet");
-        jPanel2.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, 430, 60));
+        actString3.setBackground(new java.awt.Color(153, 153, 153));
+        actString3.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
+        jPanel2.add(actString3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, 630, 60));
 
-        jLabel10.setBackground(new java.awt.Color(153, 153, 153));
-        jLabel10.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
-        jLabel10.setText("- You cancelled Your flight to Jeddah at Friday");
-        jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 170, 430, 60));
+        actString4.setBackground(new java.awt.Color(153, 153, 153));
+        actString4.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
+        jPanel2.add(actString4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 200, 590, 60));
 
-        jLabel11.setBackground(new java.awt.Color(153, 153, 153));
-        jLabel11.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
-        jLabel11.setText("- You booked an air flight to Jeddah at Friday");
-        jPanel2.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 240, 430, 60));
+        actString7.setBackground(new java.awt.Color(153, 153, 153));
+        actString7.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
+        jPanel2.add(actString7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 380, 430, 60));
 
-        jLabel12.setBackground(new java.awt.Color(153, 153, 153));
-        jLabel12.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
-        jLabel12.setText("- You added 1000 Riyals to your wallet");
-        jPanel2.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 300, 430, 60));
+        actString6.setBackground(new java.awt.Color(153, 153, 153));
+        actString6.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
+        jPanel2.add(actString6, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 320, 570, 60));
+
+        actString5.setBackground(new java.awt.Color(153, 153, 153));
+        actString5.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
+        jPanel2.add(actString5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 260, 550, 60));
 
         whiteLabelCustomer.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 290, 780, 430));
 
@@ -282,7 +284,7 @@ public class customerDashboard extends javax.swing.JFrame {
     private void walletButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_walletButtonActionPerformed
         // TODO add your handling code here:
         if(evt.getSource() == walletButton){
-            WalletsDashboard p = new WalletsDashboard();
+            WalletsDashboard p = new WalletsDashboard(currentCustomer);
             p.setVisible(true);
             dispose();
         }
@@ -291,7 +293,7 @@ public class customerDashboard extends javax.swing.JFrame {
     private void ticketsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ticketsButtonActionPerformed
         // TODO add your handling code here:
         if(evt.getSource() == ticketsButton){
-            TicketsDashboard p = new TicketsDashboard();
+            TicketsDashboard p = new TicketsDashboard(currentCustomer);
             p.setVisible(true);
             dispose();
         }
@@ -322,28 +324,75 @@ public class customerDashboard extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_homeButtonActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    
+    public void printActivities(String bigString){
+        String[] smallerStrings = bigString.split(",");
+        for (int i = 0; i < smallerStrings.length; i++){
+            if (i == 0){
+                actString1.setText(smallerStrings[i]);
+            }
+            else if (i == 1){
+                actString1.setText(smallerStrings[i]);
+                actString2.setText(smallerStrings[i-1]);
+            }
+            else if (i  == 2){
+                actString1.setText(smallerStrings[i]);
+                actString2.setText(smallerStrings[i-1]);
+                actString3.setText(smallerStrings[i-2]);
+            }
+            else if (i == 3){
+                actString1.setText(smallerStrings[i]);
+                actString2.setText(smallerStrings[i-1]);
+                actString3.setText(smallerStrings[i-2]);
+                actString4.setText(smallerStrings[i-3]);
+            }
+            else if (i == 4){
+                actString1.setText(smallerStrings[i]);
+                actString2.setText(smallerStrings[i-1]);
+                actString3.setText(smallerStrings[i-2]);
+                actString4.setText(smallerStrings[i-3]);
+                actString5.setText(smallerStrings[i-4]);
+            }
+            else if (i == 5){
+                actString1.setText(smallerStrings[i]);
+                actString2.setText(smallerStrings[i-1]);
+                actString3.setText(smallerStrings[i-2]);
+                actString4.setText(smallerStrings[i-3]);
+                actString5.setText(smallerStrings[i-4]);
+                actString6.setText(smallerStrings[i-5]);
+            }
+            else if (i == 6){
+                actString1.setText(smallerStrings[i]);
+                actString2.setText(smallerStrings[i-1]);
+                actString3.setText(smallerStrings[i-2]);
+                actString4.setText(smallerStrings[i-3]);
+                actString5.setText(smallerStrings[i-4]);
+                actString6.setText(smallerStrings[i-5]);
+                actString7.setText(smallerStrings[i-6]);
+            }
+            else{
+                break;
+            }
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel actString1;
+    private javax.swing.JLabel actString2;
+    private javax.swing.JLabel actString3;
+    private javax.swing.JLabel actString4;
+    private javax.swing.JLabel actString5;
+    private javax.swing.JLabel actString6;
+    private javax.swing.JLabel actString7;
     private javax.swing.JPanel darkLabelCustomer;
     private javax.swing.JButton flightsButton;
     private javax.swing.JButton homeButton;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JSeparator jSeparator1;

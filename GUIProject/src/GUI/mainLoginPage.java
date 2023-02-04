@@ -32,8 +32,7 @@ public class mainLoginPage extends javax.swing.JFrame {
     private int index1;
     private Timer timer;
     private Timer timer1;
-    Connection connection;
-    Customer customer;
+    Connection connection;    
     
     String DatabaseURL = "jdbc:mysql://localhost:3306/flyout?zeroDateTimeBehavior=CONVERT_TO_NULL";
     String databaseUsername = "root";
@@ -104,7 +103,6 @@ public class mainLoginPage extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         usernameTextField = new javax.swing.JTextField();
         passwordTextField = new javax.swing.JPasswordField();
-        accessComboBox = new javax.swing.JComboBox<>();
         signInButton = new javax.swing.JButton();
         registerButton = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -149,19 +147,6 @@ public class mainLoginPage extends javax.swing.JFrame {
         passwordTextField.setCaretColor(new java.awt.Color(223, 223, 223));
         passwordTextField.setSelectionColor(new java.awt.Color(223, 223, 223));
         jPanel2.add(passwordTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 260, 220, 40));
-
-        accessComboBox.setBackground(new java.awt.Color(223, 223, 223));
-        accessComboBox.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
-        accessComboBox.setMaximumRowCount(2);
-        accessComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Customer", "Admin" }));
-        accessComboBox.setToolTipText("Which type of user are you");
-        accessComboBox.setBorder(javax.swing.BorderFactory.createCompoundBorder());
-        accessComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                accessComboBoxActionPerformed(evt);
-            }
-        });
-        jPanel2.add(accessComboBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 160, 100, -1));
 
         signInButton.setBackground(new java.awt.Color(223, 223, 223));
         signInButton.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -251,7 +236,7 @@ public class mainLoginPage extends javax.swing.JFrame {
         // TODO add your handling code here:
         String username = usernameTextField.getText();
         String password = passwordTextField.getText();
-        String accessChoice = accessComboBox.getActionCommand();
+        //String accessChoice = accessComboBox.getActionCommand();
         if (username.equals("") && password.equals("")){
             JOptionPane.showMessageDialog(null, "Both username and password fields are empty");
         } else if (username.equals("") && !password.equals("")){
@@ -277,12 +262,13 @@ public class mainLoginPage extends javax.swing.JFrame {
                 String lastName = resultSet.getString("passengerLastName");
                 String phoneNumber = resultSet.getString("passengerPhone");
                 String passHistory = resultSet.getString("passengerHistory");
-                double wallet = resultSet.getDouble("Wallet");
+                double wallet = resultSet.getDouble("passengerWallet");
                 System.out.println(correctPassword);
                 // check if username and password match the stored values
                 if (new String(passwordVal).equals(correctPassword)) {
     //                JOptionPane.showMessageDialog(null, "Login successful!");
-                        customerDashboard p = new customerDashboard();
+                        Customer customer = new Customer(firstName,lastName,password,correctEmail,phoneNumber,username,passHistory);
+                        customerDashboard p = new customerDashboard(customer);
                         p.setVisible(true);
                         dispose();
                     } else {
@@ -302,10 +288,6 @@ public class mainLoginPage extends javax.swing.JFrame {
         
         }
     }//GEN-LAST:event_signInButtonActionPerformed
-
-    private void accessComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_accessComboBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_accessComboBoxActionPerformed
 
     private void welcomeLabelAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_welcomeLabelAncestorAdded
         // TODO add your handling code here:
@@ -341,7 +323,6 @@ public class mainLoginPage extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> accessComboBox;
     private javax.swing.JLabel hurryLabel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

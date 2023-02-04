@@ -199,6 +199,7 @@ public class SignUpPage extends javax.swing.JFrame {
             email = emailTextfield1.getText();
             password = passwordField.getPassword();
             phoneNumber = phoneNumberTextfield.getText();
+            Customer currentCustomer;
            
             //some valid
             boolean emptyValid = false;
@@ -241,7 +242,21 @@ public class SignUpPage extends javax.swing.JFrame {
             // if everything is true then, do the following
             if(passwordIsPowerful && emailValid && emptyValid && phoneValid &&firstName.matches("^[a-zA-Z]*$") &&lastName.matches("^[a-zA-Z]*$")){
                 //Customer currentUser = new Customer(firstName, lastName, new String(password), email, phoneNumber, username);                
-                
+                try{
+                    connectToDB();
+                    Statement st = connection.createStatement();
+                    String query = "SELECT * FROM passengers WHERE passengerUsername='" + username + "'";
+                    ResultSet rs = st.executeQuery(query);
+                    String sampleUsername = null;
+                    if (rs.next()){
+                        while(sampleUsername == null)
+                            sampleUsername = JOptionPane.showInputDialog("Username Already exists, pick another one");
+                        username = sampleUsername;
+                    }
+                } catch(SQLException e){
+                    e.printStackTrace();
+                }
+                Customer currentUser = new Customer(firstName,lastName,new String(password),email,phoneNumber,username,"- You created an account with Flyout,");
                 // pushing elemetnts to the database
                 try{
                     connectToDB();
@@ -254,7 +269,7 @@ public class SignUpPage extends javax.swing.JFrame {
                     st.setString(5, lastName);
                     st.setString(6, phoneNumber);
                     st.setDouble(7, 0.0);
-                    st.setString(8, "You created an accound with Flyout,");
+                    st.setString(8, "- You created an account with Flyout,");
                     st.executeUpdate();
                     System.out.println("Informations have been sent successfully");
                 } catch(SQLException e){
@@ -263,7 +278,7 @@ public class SignUpPage extends javax.swing.JFrame {
                 }   catch (Exception ex) {
                         Logger.getLogger(SignUpPage.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                customerDashboard p = new customerDashboard();
+                customerDashboard p = new customerDashboard(currentUser);
                 p.setVisible(true);
                 dispose();
             }

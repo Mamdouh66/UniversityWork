@@ -18,11 +18,10 @@ public class flightsDashboard extends javax.swing.JFrame {
     private int index1;
     private Timer timer;
     private Timer timer1;
-    public flightsDashboard() {
-        initComponents();
-    }
+    Customer currentCustomer;
     public flightsDashboard(Customer customerUser){
-        String customerFirstName = "test";
+        currentCustomer = customerUser;
+        String customerFirstName = customerUser.getCustomerFirstName();
         text = "Hello, " + customerFirstName;
         index = 0;
         timer = new Timer(100, new ActionListener() {
@@ -283,7 +282,7 @@ public class flightsDashboard extends javax.swing.JFrame {
     private void walletsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_walletsButtonActionPerformed
         // TODO add your handling code here:
         if(evt.getSource() == walletsButton){
-            WalletsDashboard p = new WalletsDashboard();
+            WalletsDashboard p = new WalletsDashboard(currentCustomer);
             p.setVisible(true);
             dispose();
         }
@@ -292,7 +291,7 @@ public class flightsDashboard extends javax.swing.JFrame {
     private void homeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_homeButtonActionPerformed
         // TODO add your handling code here:
         if(evt.getSource() == homeButton){
-            customerDashboard p = new customerDashboard();
+            customerDashboard p = new customerDashboard(currentCustomer);
             p.setVisible(true);
             dispose();
         }
@@ -308,46 +307,12 @@ public class flightsDashboard extends javax.swing.JFrame {
     private void ticketsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ticketsButtonActionPerformed
         // TODO add your handling code here:
         if(evt.getSource() == ticketsButton){
-            TicketsDashboard p = new TicketsDashboard();
+            TicketsDashboard p = new TicketsDashboard(currentCustomer);
             p.setVisible(true);
             dispose();
         }
     }//GEN-LAST:event_ticketsButtonActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(flightsDashboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(flightsDashboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(flightsDashboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(flightsDashboard.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new flightsDashboard().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel darkLabelCustomer;
