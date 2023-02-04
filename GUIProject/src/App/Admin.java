@@ -3,6 +3,16 @@ public class Admin extends User{
     private boolean isManager = false;
     private String adminFirstName;
     private String adminLastName;
+    
+    public Admin(String fName, String Lname, String username, String Password, String phone, String email, boolean is){
+        adminFirstName = fName;
+        adminLastName = Lname;
+        setUsername(username);
+        setPassword(Password);
+        setPhoneNumber(phone);
+        setEmail(email);
+        isManager = is;
+    }
 
     public void setAdminFirstName(String adminFirstName) {
         this.adminFirstName = adminFirstName;

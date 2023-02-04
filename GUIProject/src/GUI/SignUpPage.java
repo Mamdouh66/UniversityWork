@@ -248,11 +248,28 @@ public class SignUpPage extends javax.swing.JFrame {
                     String query = "SELECT * FROM passengers WHERE passengerUsername='" + username + "'";
                     ResultSet rs = st.executeQuery(query);
                     String sampleUsername = null;
+                    String sampleEmial = null;
+                    String samplePhone = null;
                     if (rs.next()){
                         while(sampleUsername == null)
                             sampleUsername = JOptionPane.showInputDialog("Username Already exists, pick another one");
                         username = sampleUsername;
                     }
+                    query = "SELECT * FROM passengers WHERE passengerEmail='" + email + "'";
+                    rs = st.executeQuery(query);
+                    if (rs.next()){
+                        while(sampleEmial == null)
+                            sampleEmial = JOptionPane.showInputDialog("Email Already exists, pick another one");
+                        email = sampleEmial;
+                    }
+                    query = "SELECT * FROM passengers WHERE passengerPhone='" + phoneNumber + "'";
+                    rs = st.executeQuery(query);
+                    if (rs.next()){
+                        while(samplePhone == null)
+                            samplePhone = JOptionPane.showInputDialog("Email Already exists, pick another one");
+                        phoneNumber = samplePhone;
+                    }
+                    disconnectFromDB();
                 } catch(SQLException e){
                     e.printStackTrace();
                 }
