@@ -11,6 +11,10 @@ import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import App.*;
+import java.security.Key;
+import java.util.Base64;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
 
 
 /**
@@ -264,10 +268,19 @@ public class mainLoginPage extends javax.swing.JFrame {
                 String query = "SELECT * FROM passengers WHERE passengerUsername = '" + username + "'";
                 ResultSet resultSet = st.executeQuery(query);
                 if (resultSet.next()) {
-                customer.setUsername(resultSet.getString("passengerUsername"));
-                customer.setPassword(resultSet.getString("passengerPassword"));
+//                customer.setUsername(resultSet.getString("passengerUsername"));
+                String correctPassword = resultSet.getString("passengerPassword");
+                correctPassword = decrypt(correctPassword);
+                // information from database
+                String correctEmail = resultSet.getString("passengerEmail");
+                String firstName = resultSet.getString("passengerFirstName");
+                String lastName = resultSet.getString("passengerLastName");
+                String phoneNumber = resultSet.getString("passengerPhone");
+                String passHistory = resultSet.getString("passengerHistory");
+                double wallet = resultSet.getDouble("Wallet");
+                System.out.println(correctPassword);
                 // check if username and password match the stored values
-                if (username.equals(customer.getUsername()) && new String(passwordVal).equals(customer.getPassword())) {
+                if (new String(passwordVal).equals(correctPassword)) {
     //                JOptionPane.showMessageDialog(null, "Login successful!");
                         customerDashboard p = new customerDashboard();
                         p.setVisible(true);
@@ -280,6 +293,8 @@ public class mainLoginPage extends javax.swing.JFrame {
                     System.out.println("User not found");
                 }
             } catch (SQLException ex) {
+                Logger.getLogger(mainLoginPage.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception ex) {
                 Logger.getLogger(mainLoginPage.class.getName()).log(Level.SEVERE, null, ex);
             }
             
@@ -308,40 +323,22 @@ public class mainLoginPage extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_registerButtonActionPerformed
     
-    /**
-     * @param args the command line arguments
-     */
-//    public static void main(String args[]) {
-//        /* Set the Nimbus look and feel */
-//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-//         */
-//        try {
-//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-//                if ("Nimbus".equals(info.getName())) {
-//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-//                    break;
-//                }
-//            }
-//        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(NewJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(NewJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(NewJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(NewJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        }
-//        //</editor-fold>
-//
-//        /* Create and display the form */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                new NewJFrame().setVisible(true);
-//            }
-//        });
-//    }
+    // Decrypt the password
+    private static final String ALGO = "AES";
+    private static final byte[] keyValue =
+            new byte[] {'T', 'h', 'e', 'B', 'e', 's', 't',
+                    'S', 'e', 'c', 'r','e', 't', 'K', 'e', 'y'};
+    private static Key generateKey() throws Exception {
+        return new SecretKeySpec(keyValue, ALGO);
+    }
+       public static String decrypt(String encryptedData) throws Exception {
+        Key key = generateKey();
+        Cipher c = Cipher.getInstance(ALGO);
+        c.init(Cipher.DECRYPT_MODE, key);
+        byte[] decordedValue = Base64.getDecoder().decode(encryptedData);
+        byte[] decValue = c.doFinal(decordedValue);
+        return new String(decValue);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> accessComboBox;

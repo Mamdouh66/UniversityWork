@@ -6,9 +6,10 @@ public class Customer extends User{
     private String customerFirstName;
     private String customerLastName;
     private boolean canBuy = false;
+    String[] customerHistory;
 
     public Customer(){}
-    public Customer (String cFirstName, String  cLastName, String pass, String eml,String  phn,String  username) {
+    public Customer (String cFirstName, String  cLastName, String pass, String eml,String  phn,String  username, String[] history) {
         customerFirstName = cFirstName;
         customerLastName = cLastName;
         this.setPassword(pass);
@@ -16,6 +17,15 @@ public class Customer extends User{
         this.setUsername(username);
         this.setEmail(eml);
     }
+
+    public void setCustomerHistory(String[] customerHistory) {
+        this.customerHistory = customerHistory;
+    }
+
+    public String[] getCustomerHistory() {
+        return customerHistory;
+    }
+    
     public String getCustomerFirstName() {
         return customerFirstName;
     }
@@ -36,26 +46,7 @@ public class Customer extends User{
         this.customerLastName = customerLastName;
     }
 
-    @Override
-    public void setEmail(String email) {
-        super.setEmail(email); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
-    }
 
-    @Override
-    public void setPassword(String password) {
-        super.setPassword(password); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
-    }
-
-    @Override
-    public void setPhoneNumber(String phoneNumber) {
-        super.setPhoneNumber(phoneNumber); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
-    }
-
-    @Override
-    public void setUsername(String username) {
-        super.setUsername(username); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
-    }
-    
     // public void checkWallet(){}
     // public void cancelFlight(){}
 }

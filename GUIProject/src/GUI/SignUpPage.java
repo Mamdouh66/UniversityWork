@@ -240,7 +240,7 @@ public class SignUpPage extends javax.swing.JFrame {
                    JOptionPane.showMessageDialog(null, "First Name and Last Name are not valid, they should contain only letters");
             // if everything is true then, do the following
             if(passwordIsPowerful && emailValid && emptyValid && phoneValid &&firstName.matches("^[a-zA-Z]*$") &&lastName.matches("^[a-zA-Z]*$")){
-                Customer currentUser = new Customer(firstName, lastName, new String(password), email, phoneNumber, username);                
+                //Customer currentUser = new Customer(firstName, lastName, new String(password), email, phoneNumber, username);                
                 
                 // pushing elemetnts to the database
                 try{
@@ -263,7 +263,7 @@ public class SignUpPage extends javax.swing.JFrame {
                 }   catch (Exception ex) {
                         Logger.getLogger(SignUpPage.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                customerDashboard p = new customerDashboard(currentUser);
+                customerDashboard p = new customerDashboard();
                 p.setVisible(true);
                 dispose();
             }
