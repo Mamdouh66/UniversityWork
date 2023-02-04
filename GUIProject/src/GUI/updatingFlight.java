@@ -6,6 +6,7 @@ public class updatingFlight extends javax.swing.JFrame {
     public updatingFlight(Admin ad) {
         admin = ad;
         initComponents();
+        addButton.setVisible(admin.getIsManager());
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -16,7 +17,8 @@ public class updatingFlight extends javax.swing.JFrame {
         logoutButton = new javax.swing.JButton();
         deleteButton = new javax.swing.JButton();
         updateButton = new javax.swing.JButton();
-        addingButton = new javax.swing.JButton();
+        addButton = new javax.swing.JButton();
+        addingButton1 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
@@ -56,7 +58,7 @@ public class updatingFlight extends javax.swing.JFrame {
                 logoutButtonActionPerformed(evt);
             }
         });
-        darkLabelCustomer.add(logoutButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 440, 180, 50));
+        darkLabelCustomer.add(logoutButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 470, 180, 50));
 
         deleteButton.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         deleteButton.setForeground(new java.awt.Color(223, 223, 223));
@@ -73,7 +75,7 @@ public class updatingFlight extends javax.swing.JFrame {
                 deleteButtonActionPerformed(evt);
             }
         });
-        darkLabelCustomer.add(deleteButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 330, 200, 40));
+        darkLabelCustomer.add(deleteButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 380, 200, 40));
 
         updateButton.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         updateButton.setForeground(new java.awt.Color(223, 223, 223));
@@ -90,24 +92,41 @@ public class updatingFlight extends javax.swing.JFrame {
                 updateButtonActionPerformed(evt);
             }
         });
-        darkLabelCustomer.add(updateButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 240, 240, 40));
+        darkLabelCustomer.add(updateButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(-10, 300, 240, 40));
 
-        addingButton.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        addingButton.setForeground(new java.awt.Color(223, 223, 223));
-        addingButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/add.png"))); // NOI18N
-        addingButton.setText("ADD FLIGHTS");
-        addingButton.setBorderPainted(false);
-        addingButton.setContentAreaFilled(false);
-        addingButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        addingButton.setFocusPainted(false);
-        addingButton.setFocusable(false);
-        addingButton.setIconTextGap(8);
-        addingButton.addActionListener(new java.awt.event.ActionListener() {
+        addButton.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        addButton.setForeground(new java.awt.Color(223, 223, 223));
+        addButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/add.png"))); // NOI18N
+        addButton.setText("ADD FLIGHTS");
+        addButton.setBorderPainted(false);
+        addButton.setContentAreaFilled(false);
+        addButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        addButton.setFocusPainted(false);
+        addButton.setFocusable(false);
+        addButton.setIconTextGap(8);
+        addButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addingButtonActionPerformed(evt);
+                addButtonActionPerformed(evt);
             }
         });
-        darkLabelCustomer.add(addingButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 230, 40));
+        darkLabelCustomer.add(addButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(-20, 220, 230, 40));
+
+        addingButton1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        addingButton1.setForeground(new java.awt.Color(223, 223, 223));
+        addingButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/user-add.png"))); // NOI18N
+        addingButton1.setText("ADDING ADMIN");
+        addingButton1.setBorderPainted(false);
+        addingButton1.setContentAreaFilled(false);
+        addingButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        addingButton1.setFocusPainted(false);
+        addingButton1.setFocusable(false);
+        addingButton1.setIconTextGap(8);
+        addingButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addingButton1ActionPerformed(evt);
+            }
+        });
+        darkLabelCustomer.add(addingButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 140, 230, 40));
 
         getContentPane().add(darkLabelCustomer, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 230, 560));
 
@@ -221,14 +240,14 @@ public class updatingFlight extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_updateButtonActionPerformed
 
-    private void addingButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addingButtonActionPerformed
+    private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
         // TODO add your handling code here:
-        if (evt.getSource() == addingButton){
+        if (evt.getSource() == addButton){
             AdminDashboard p = new AdminDashboard(admin);
             p.setVisible(true);
             dispose();
         }
-    }//GEN-LAST:event_addingButtonActionPerformed
+    }//GEN-LAST:event_addButtonActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
@@ -238,9 +257,19 @@ public class updatingFlight extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField10ActionPerformed
 
+    private void addingButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addingButton1ActionPerformed
+        // TODO add your handling code here:
+        if (evt.getSource() == addingButton1){
+            managerDashboard p = new managerDashboard(admin);
+            p.setVisible(true);
+            dispose();
+        }
+    }//GEN-LAST:event_addingButton1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton addingButton;
+    private javax.swing.JButton addButton;
+    private javax.swing.JButton addingButton1;
     private javax.swing.JPanel darkLabelCustomer;
     private javax.swing.JButton deleteButton;
     private javax.swing.JButton jButton2;

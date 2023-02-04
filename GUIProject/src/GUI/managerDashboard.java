@@ -1,8 +1,13 @@
 package GUI;
 import App.*;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+import java.sql.*;
 public class managerDashboard extends javax.swing.JFrame {
     
     Admin bigBoss;
+    Connection connection;
     public managerDashboard(Admin manager) {
         bigBoss = manager;
         
@@ -22,13 +27,13 @@ public class managerDashboard extends javax.swing.JFrame {
         jPanel4 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
-        jTextField13 = new javax.swing.JTextField();
-        jButton3 = new javax.swing.JButton();
-        jTextField15 = new javax.swing.JTextField();
-        jTextField16 = new javax.swing.JTextField();
-        jTextField17 = new javax.swing.JTextField();
-        jTextField18 = new javax.swing.JTextField();
-        jTextField19 = new javax.swing.JTextField();
+        passwordTextField = new javax.swing.JTextField();
+        addAdminButton = new javax.swing.JButton();
+        usernameTextField = new javax.swing.JTextField();
+        phoneNumberText = new javax.swing.JTextField();
+        firstTextField = new javax.swing.JTextField();
+        lastTextField = new javax.swing.JTextField();
+        emailTextField1 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -137,54 +142,54 @@ public class managerDashboard extends javax.swing.JFrame {
         jPanel5.setBackground(new java.awt.Color(102, 102, 102));
         jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jTextField13.setBackground(new java.awt.Color(102, 102, 102));
-        jTextField13.setForeground(new java.awt.Color(255, 255, 255));
-        jTextField13.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Password", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 15), new java.awt.Color(255, 255, 255))); // NOI18N
-        jTextField13.addActionListener(new java.awt.event.ActionListener() {
+        passwordTextField.setBackground(new java.awt.Color(102, 102, 102));
+        passwordTextField.setForeground(new java.awt.Color(255, 255, 255));
+        passwordTextField.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Password", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 15), new java.awt.Color(255, 255, 255))); // NOI18N
+        passwordTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField13ActionPerformed(evt);
+                passwordTextFieldActionPerformed(evt);
             }
         });
-        jPanel5.add(jTextField13, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 10, 210, 50));
+        jPanel5.add(passwordTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 10, 210, 50));
 
-        jButton3.setBackground(new java.awt.Color(204, 204, 204));
-        jButton3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jButton3.setText("ADD");
-        jButton3.setBorderPainted(false);
-        jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton3.setFocusPainted(false);
-        jButton3.setFocusable(false);
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        addAdminButton.setBackground(new java.awt.Color(204, 204, 204));
+        addAdminButton.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        addAdminButton.setText("ADD");
+        addAdminButton.setBorderPainted(false);
+        addAdminButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        addAdminButton.setFocusPainted(false);
+        addAdminButton.setFocusable(false);
+        addAdminButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                addAdminButtonActionPerformed(evt);
             }
         });
-        jPanel5.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 200, 170, 40));
+        jPanel5.add(addAdminButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 200, 170, 40));
 
-        jTextField15.setBackground(new java.awt.Color(102, 102, 102));
-        jTextField15.setForeground(new java.awt.Color(255, 255, 255));
-        jTextField15.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Username", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 15), new java.awt.Color(255, 255, 255))); // NOI18N
-        jPanel5.add(jTextField15, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 180, 50));
+        usernameTextField.setBackground(new java.awt.Color(102, 102, 102));
+        usernameTextField.setForeground(new java.awt.Color(255, 255, 255));
+        usernameTextField.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Username", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 15), new java.awt.Color(255, 255, 255))); // NOI18N
+        jPanel5.add(usernameTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 180, 50));
 
-        jTextField16.setBackground(new java.awt.Color(102, 102, 102));
-        jTextField16.setForeground(new java.awt.Color(255, 255, 255));
-        jTextField16.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Phone Number", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 15), new java.awt.Color(255, 255, 255))); // NOI18N
-        jPanel5.add(jTextField16, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 130, 210, 50));
+        phoneNumberText.setBackground(new java.awt.Color(102, 102, 102));
+        phoneNumberText.setForeground(new java.awt.Color(255, 255, 255));
+        phoneNumberText.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Phone Number", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 15), new java.awt.Color(255, 255, 255))); // NOI18N
+        jPanel5.add(phoneNumberText, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 130, 210, 50));
 
-        jTextField17.setBackground(new java.awt.Color(102, 102, 102));
-        jTextField17.setForeground(new java.awt.Color(255, 255, 255));
-        jTextField17.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "First Name", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 15), new java.awt.Color(255, 255, 255))); // NOI18N
-        jPanel5.add(jTextField17, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 170, 50));
+        firstTextField.setBackground(new java.awt.Color(102, 102, 102));
+        firstTextField.setForeground(new java.awt.Color(255, 255, 255));
+        firstTextField.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "First Name", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 15), new java.awt.Color(255, 255, 255))); // NOI18N
+        jPanel5.add(firstTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 170, 50));
 
-        jTextField18.setBackground(new java.awt.Color(102, 102, 102));
-        jTextField18.setForeground(new java.awt.Color(255, 255, 255));
-        jTextField18.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Last Name", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 15), new java.awt.Color(255, 255, 255))); // NOI18N
-        jPanel5.add(jTextField18, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 70, 210, 50));
+        lastTextField.setBackground(new java.awt.Color(102, 102, 102));
+        lastTextField.setForeground(new java.awt.Color(255, 255, 255));
+        lastTextField.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Last Name", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 15), new java.awt.Color(255, 255, 255))); // NOI18N
+        jPanel5.add(lastTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 70, 210, 50));
 
-        jTextField19.setBackground(new java.awt.Color(102, 102, 102));
-        jTextField19.setForeground(new java.awt.Color(255, 255, 255));
-        jTextField19.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "E-MAIL", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 15), new java.awt.Color(255, 255, 255))); // NOI18N
-        jPanel5.add(jTextField19, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, 170, 50));
+        emailTextField1.setBackground(new java.awt.Color(102, 102, 102));
+        emailTextField1.setForeground(new java.awt.Color(255, 255, 255));
+        emailTextField1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "E-MAIL", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 15), new java.awt.Color(255, 255, 255))); // NOI18N
+        jPanel5.add(emailTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, 170, 50));
 
         jPanel4.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 170, 440, 260));
 
@@ -222,42 +227,84 @@ public class managerDashboard extends javax.swing.JFrame {
 
     private void addingButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addingButtonActionPerformed
         // TODO add your handling code here:
-        if (evt.getSource() == addingButton){
+        if(evt.getSource() == updateButton){
+            JOptionPane.showMessageDialog(null, "You are in the adding admins page");
+        }
+    }//GEN-LAST:event_addingButtonActionPerformed
+
+    private void addAdminButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addAdminButtonActionPerformed
+        // TODO add your handling code here:
+        String username = usernameTextField.getText();
+        String password = passwordTextField.getText();
+        String firstName = firstTextField.getText();
+        String lastName = lastTextField.getText();
+        String email = emailTextField1.getText();
+        String phoneNumber = phoneNumberText.getText();
+        
+        try{
+            connectToDB();
+            PreparedStatement st =  connection.prepareStatement("INSERT INTO admins (adminUsername,adminPassword,adminFirstName,adminLastName,adminEmail,adminPhone,isManager) VALUES (?,?,?,?,?,?,?)");
+            st.setString(1, username);
+            st.setString(2, password);
+            st.setString(3, firstName);
+            st.setString(4, lastName);
+            st.setString(5, email);
+            st.setString(6, phoneNumber);
+            st.setBoolean(7, false);
+            st.executeUpdate();
+            System.out.println("Informations have been sent successfully");
+        } catch(SQLException e){
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_addAdminButtonActionPerformed
+
+    private void flightsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_flightsButtonActionPerformed
+        // TODO add your handling code here:
+        if (evt.getSource() == flightsButton){
             AdminDashboard p = new AdminDashboard(bigBoss);
             p.setVisible(true);
             dispose();
         }
-    }//GEN-LAST:event_addingButtonActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
-
-    private void flightsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_flightsButtonActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_flightsButtonActionPerformed
-
-    private void jTextField13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField13ActionPerformed
+    public void connectToDB(){
+       try{
+       connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/flyout?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "1234");
+       System.out.println("Connected");
+       } catch(SQLException e){
+           System.out.println("Unable to connect");
+           e.printStackTrace();
+       }
+    } 
+    public void disconnectFromDB() {
+    try {
+      connection.close();
+      System.out.println("Disconnected");
+    } catch (SQLException e) {
+      System.out.println("Unable to disconnect");
+      e.printStackTrace();
+    }
+  }
+    private void passwordTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordTextFieldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField13ActionPerformed
+    }//GEN-LAST:event_passwordTextFieldActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addAdminButton;
     private javax.swing.JButton addingButton;
     private javax.swing.JPanel darkLabelCustomer1;
     private javax.swing.JButton deleteButton;
+    private javax.swing.JTextField emailTextField1;
+    private javax.swing.JTextField firstTextField;
     private javax.swing.JButton flightsButton;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JTextField jTextField13;
-    private javax.swing.JTextField jTextField15;
-    private javax.swing.JTextField jTextField16;
-    private javax.swing.JTextField jTextField17;
-    private javax.swing.JTextField jTextField18;
-    private javax.swing.JTextField jTextField19;
+    private javax.swing.JTextField lastTextField;
     private javax.swing.JButton outButton;
+    private javax.swing.JTextField passwordTextField;
+    private javax.swing.JTextField phoneNumberText;
     private javax.swing.JButton updateButton;
+    private javax.swing.JTextField usernameTextField;
     // End of variables declaration//GEN-END:variables
 }

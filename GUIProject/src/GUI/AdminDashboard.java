@@ -4,9 +4,10 @@ import javax.swing.JOptionPane;
 public class AdminDashboard extends javax.swing.JFrame {
     Admin admin;
     public AdminDashboard(Admin ad) {
-        admin = ad;
-        
+        admin = ad;       
+        System.out.println(admin.getIsManager());
         initComponents();
+        addingButton.setVisible(admin.getIsManager());
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -19,6 +20,7 @@ public class AdminDashboard extends javax.swing.JFrame {
         deleteButton = new javax.swing.JButton();
         updateButton = new javax.swing.JButton();
         addButton = new javax.swing.JButton();
+        addingButton = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
@@ -69,7 +71,7 @@ public class AdminDashboard extends javax.swing.JFrame {
                 logoutButtonActionPerformed(evt);
             }
         });
-        darkLabelCustomer.add(logoutButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 440, 180, 50));
+        darkLabelCustomer.add(logoutButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 460, 180, 50));
 
         deleteButton.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         deleteButton.setForeground(new java.awt.Color(223, 223, 223));
@@ -86,7 +88,7 @@ public class AdminDashboard extends javax.swing.JFrame {
                 deleteButtonActionPerformed(evt);
             }
         });
-        darkLabelCustomer.add(deleteButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 330, 200, 40));
+        darkLabelCustomer.add(deleteButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 370, 200, 40));
 
         updateButton.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         updateButton.setForeground(new java.awt.Color(223, 223, 223));
@@ -103,7 +105,7 @@ public class AdminDashboard extends javax.swing.JFrame {
                 updateButtonActionPerformed(evt);
             }
         });
-        darkLabelCustomer.add(updateButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 240, 240, 40));
+        darkLabelCustomer.add(updateButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(-10, 290, 240, 40));
 
         addButton.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         addButton.setForeground(new java.awt.Color(223, 223, 223));
@@ -120,7 +122,24 @@ public class AdminDashboard extends javax.swing.JFrame {
                 addButtonActionPerformed(evt);
             }
         });
-        darkLabelCustomer.add(addButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 230, 40));
+        darkLabelCustomer.add(addButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(-20, 210, 230, 40));
+
+        addingButton.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        addingButton.setForeground(new java.awt.Color(223, 223, 223));
+        addingButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/user-add.png"))); // NOI18N
+        addingButton.setText("ADDING ADMIN");
+        addingButton.setBorderPainted(false);
+        addingButton.setContentAreaFilled(false);
+        addingButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        addingButton.setFocusPainted(false);
+        addingButton.setFocusable(false);
+        addingButton.setIconTextGap(8);
+        addingButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addingButtonActionPerformed(evt);
+            }
+        });
+        darkLabelCustomer.add(addingButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 140, 230, 40));
 
         getContentPane().add(darkLabelCustomer, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 230, 560));
 
@@ -237,9 +256,19 @@ public class AdminDashboard extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void addingButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addingButtonActionPerformed
+        // TODO add your handling code here:
+        if (evt.getSource() == addingButton){
+            managerDashboard p = new managerDashboard(admin);
+            p.setVisible(true);
+            dispose();
+        }
+    }//GEN-LAST:event_addingButtonActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addButton;
+    private javax.swing.JButton addingButton;
     private javax.swing.JPanel darkLabelCustomer;
     private javax.swing.JButton deleteButton;
     private javax.swing.JButton jButton2;

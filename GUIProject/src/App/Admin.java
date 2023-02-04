@@ -13,7 +13,9 @@ public class Admin extends User{
         setEmail(email);
         isManager = is;
     }
-
+    public boolean getIsManager(){
+        return isManager;
+    }
     public void setAdminFirstName(String adminFirstName) {
         this.adminFirstName = adminFirstName;
     }

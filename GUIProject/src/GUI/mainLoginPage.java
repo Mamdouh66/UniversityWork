@@ -240,8 +240,13 @@ public class mainLoginPage extends javax.swing.JFrame {
             connectToDB();
             try {
                 Statement st = connection.createStatement();
+                Statement stA = connection.createStatement();
                 String query = "SELECT * FROM passengers WHERE passengerUsername = '" + username + "'";
                 ResultSet resultSet = st.executeQuery(query);
+                
+                //admin query
+                String queryA = "SELECT * FROM admins WHERE adminUsername = '" + username + "'";
+                ResultSet resultSetA = stA.executeQuery(queryA);
                 if (resultSet.next()) {
 //                customer.setUsername(resultSet.getString("passengerUsername"));
                 String correctPassword = resultSet.getString("passengerPassword");
@@ -255,38 +260,39 @@ public class mainLoginPage extends javax.swing.JFrame {
                 double wallet = resultSet.getDouble("passengerWallet");
                 System.out.println(correctPassword);
                 // check if username and password match the stored values
-                if (new String(passwordVal).equals(correctPassword)) {
-    //                JOptionPane.showMessageDialog(null, "Login successful!");
-                        Customer customer = new Customer(firstName,lastName,password,correctEmail,phoneNumber,username,passHistory);
-                        customerDashboard p = new customerDashboard(customer);
-                        p.setVisible(true);
-                        dispose();
-                    } 
-//                else {
-//                    JOptionPane.showMessageDialog(null, "Invalid username or password.");
-//                    }
+                    if (new String(passwordVal).equals(correctPassword)) {
+        //                JOptionPane.showMessageDialog(null, "Login successful!");
+                            Customer customer = new Customer(firstName,lastName,password,correctEmail,phoneNumber,username,passHistory);
+                            customerDashboard p = new customerDashboard(customer);
+                            p.setVisible(true);
+                            dispose();
+                        } 
+                    else {
+                        JOptionPane.showMessageDialog(null, "Invalid username or password.");
+                        }
                 } 
-                query = "SELECT * FROM admins WHERE adminUsername = '" + username + "'";
-                resultSet = st.executeQuery(query);
-                if (resultSet.next()){
-                    String correctPassword = resultSet.getString("adminPassword");
-                    String adminFName = resultSet.getString("adminFirstName");
-                    String adminLName = resultSet.getString("adminLastName");
-                    String adminEmail = resultSet.getString("adminEmail");
-                    String adminPhone = resultSet.getString("adminPhone");
-                    boolean admingIsManager = resultSet.getBoolean("isManager");
+                else if (resultSetA.next()){
+                    String correctedPassword = resultSetA.getString("adminPassword");
+                    String adminFName = resultSetA.getString("adminFirstName");
+                    String adminLName = resultSetA.getString("adminLastName");
+                    String adminEmail = resultSetA.getString("adminEmail");
+                    String adminPhone = resultSetA.getString("adminPhone");
+                    boolean admingIsManager = resultSetA.getBoolean("isManager");
 
-                    if (new String(passwordVal).equals(correctPassword)){
-                        Admin admin = new Admin(adminFName, adminLName, username, correctPassword, adminPhone, adminEmail, admingIsManager);
+                    if (new String(passwordVal).equals(correctedPassword)){
+                        Admin admin = new Admin(adminFName, adminLName, username, correctedPassword, adminPhone, adminEmail, admingIsManager);
                         managerDashboard p = new managerDashboard(admin);
                         p.setVisible(true);
                         dispose();
-                        }   
-                    }
-                    else{
+                        }  
+                        else{
+                        JOptionPane.showMessageDialog(null, "username or password is incorrect");                        
+                        }
+                    }  
+                else{
                     JOptionPane.showMessageDialog(null, "username was not found");
                     System.out.println("User not found");
-                    }
+                }
             } catch (SQLException ex) {
                 Logger.getLogger(mainLoginPage.class.getName()).log(Level.SEVERE, null, ex);
             } catch (Exception ex) {
