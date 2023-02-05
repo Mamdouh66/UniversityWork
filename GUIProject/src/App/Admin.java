@@ -1,8 +1,16 @@
 package App;
+import java.util.Random;
+import java.sql.*;
+
 public class Admin extends User{
     private boolean isManager = false;
     private String adminFirstName;
     private String adminLastName;
+    
+    private static final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private static final int ALPHABET_LENGTH = ALPHABET.length();
+    private static final Random RANDOM = new Random();
+    
     
     public Admin(String fName, String Lname, String username, String Password, String phone, String email, boolean is){
         adminFirstName = fName;
@@ -13,6 +21,55 @@ public class Admin extends User{
         setEmail(email);
         isManager = is;
     }
+    
+     public static String generateRandomString() {
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < 3; i++) {
+          result.append(ALPHABET.charAt(RANDOM.nextInt(ALPHABET_LENGTH)));
+        }
+        for (int i = 0; i < 3; i++) {
+          result.append(RANDOM.nextInt(10));
+        }
+        return result.toString();
+    }
+    
+     public static boolean checkIfExistsInDB(String randomString) {
+    Connection connection = null;
+    PreparedStatement statement = null;
+    ResultSet resultSet = null;
+    try {
+      connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/flyout?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "1234");
+      statement = connection.prepareStatement("SELECT * FROM flights WHERE flightID = ?");
+      statement.setString(1, randomString);
+      resultSet = statement.executeQuery();
+      return resultSet.next();
+    } catch (SQLException e) {
+      e.printStackTrace();
+      return false;
+    } finally {
+      try {
+        if (resultSet != null) {
+          resultSet.close();
+        }
+        if (statement != null) {
+          statement.close();
+        }
+        if (connection != null) {
+          connection.close();
+        }
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
+    }
+  }
+    public static String getUniqueRandomString() {
+    String randomString;
+    do {
+      randomString = generateRandomString();
+    } while (checkIfExistsInDB(randomString));
+    return randomString;
+    }
+     
     public boolean getIsManager(){
         return isManager;
     }

@@ -1,5 +1,4 @@
 package APP;
-
 import GUI.SignUpPage;
 import GUI.mainLoginPage;
 import GUI.*;
