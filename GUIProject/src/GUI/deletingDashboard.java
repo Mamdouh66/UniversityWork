@@ -1,8 +1,10 @@
 package GUI;
 import App.*;
 import javax.swing.JOptionPane;
+import java.sql.*;
 public class deletingDashboard extends javax.swing.JFrame {
     Admin admin;
+    Connection connection;
     public deletingDashboard(Admin ad) {
         admin = ad;
         initComponents();
@@ -35,8 +37,8 @@ public class deletingDashboard extends javax.swing.JFrame {
         jPanel4 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
-        jTextField13 = new javax.swing.JTextField();
-        jButton3 = new javax.swing.JButton();
+        flightTxt = new javax.swing.JTextField();
+        deleteFlightButton = new javax.swing.JButton();
         darkLabelCustomer1 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         logoutButton = new javax.swing.JButton();
@@ -211,24 +213,24 @@ public class deletingDashboard extends javax.swing.JFrame {
         jPanel5.setBackground(new java.awt.Color(102, 102, 102));
         jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jTextField13.setBackground(new java.awt.Color(102, 102, 102));
-        jTextField13.setForeground(new java.awt.Color(255, 255, 255));
-        jTextField13.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Flight ID", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 15), new java.awt.Color(255, 255, 255))); // NOI18N
-        jPanel5.add(jTextField13, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 160, 50));
+        flightTxt.setBackground(new java.awt.Color(102, 102, 102));
+        flightTxt.setForeground(new java.awt.Color(255, 255, 255));
+        flightTxt.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Flight ID", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 15), new java.awt.Color(255, 255, 255))); // NOI18N
+        jPanel5.add(flightTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 160, 50));
 
-        jButton3.setBackground(new java.awt.Color(204, 204, 204));
-        jButton3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jButton3.setText("DELETE");
-        jButton3.setBorderPainted(false);
-        jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton3.setFocusPainted(false);
-        jButton3.setFocusable(false);
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        deleteFlightButton.setBackground(new java.awt.Color(204, 204, 204));
+        deleteFlightButton.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        deleteFlightButton.setText("DELETE");
+        deleteFlightButton.setBorderPainted(false);
+        deleteFlightButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        deleteFlightButton.setFocusPainted(false);
+        deleteFlightButton.setFocusable(false);
+        deleteFlightButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                deleteFlightButtonActionPerformed(evt);
             }
         });
-        jPanel5.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 20, 170, 40));
+        jPanel5.add(deleteFlightButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 20, 170, 40));
 
         jPanel4.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, 440, 80));
 
@@ -354,10 +356,55 @@ public class deletingDashboard extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton8ActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void deleteFlightButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteFlightButtonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
-
+        String flightID = flightTxt.getText();
+        boolean sure = false;
+        int result = JOptionPane.showConfirmDialog(null, "Are you sure?", "Confirmation",
+        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (result == JOptionPane.YES_OPTION) {
+          sure = true;
+        } else if (result == JOptionPane.NO_OPTION) {
+          sure = false;
+          System.out.println("User clicked NO.");
+        }
+        try{
+            connectToDB();
+            Statement stm = connection.createStatement();
+            String query = "SELECT * FROM flights WHERE flightID='" + flightID + "'";
+            ResultSet rs = stm.executeQuery(query);
+            if (rs.next()){
+                PreparedStatement st = connection.prepareStatement("DELETE FROM flyout.flights WHERE flightID = ?");
+                st.setString(1, flightID);
+                int rowsDeleted = st.executeUpdate();
+                System.out.println(rowsDeleted + " row(s) deleted.");
+            } else{
+                JOptionPane.showMessageDialog(null, "There is no flightID as prompted");
+            }
+        }catch(SQLException e){
+            System.out.println("Something went wrong in deleting");
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_deleteFlightButtonActionPerformed
+public void connectToDB(){
+       try{
+       connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/flyout?zeroDateTimeBehavior=CONVERT_TO_NULL",
+               "root", "1234");
+       System.out.println("Connected");
+       } catch(SQLException e){
+           System.out.println("Unable to connect");
+           e.printStackTrace();
+       }
+    } 
+    public void disconnectFromDB() {
+    try {
+      connection.close();
+      System.out.println("Disconnected");
+    } catch (SQLException e) {
+      System.out.println("Unable to disconnect");
+      e.printStackTrace();
+    }
+  }
     private void logoutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutButtonActionPerformed
         // TODO add your handling code here:
         if(evt.getSource() == logoutButton){
@@ -407,10 +454,11 @@ public class deletingDashboard extends javax.swing.JFrame {
     private javax.swing.JButton addingButton1;
     private javax.swing.JPanel darkLabelCustomer;
     private javax.swing.JPanel darkLabelCustomer1;
+    private javax.swing.JButton deleteFlightButton;
     private javax.swing.JButton deletingButton;
+    private javax.swing.JTextField flightTxt;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
@@ -424,7 +472,6 @@ public class deletingDashboard extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField10;
-    private javax.swing.JTextField jTextField13;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
