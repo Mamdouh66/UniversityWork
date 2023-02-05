@@ -3,10 +3,13 @@ import App.*;
 import javax.swing.JOptionPane;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.sql.*;
+import java.util.Calendar;
 
 public class AdminDashboard extends javax.swing.JFrame {
     Admin admin;
     int dday, dmonth, dyear, aday, amonth, ayear, seats;
+    Connection connection;
     public AdminDashboard(Admin ad) {
         admin = ad;       
         System.out.println(admin.getIsManager());
@@ -271,18 +274,68 @@ public class AdminDashboard extends javax.swing.JFrame {
         validateDateD();
         validateDateA();
         
-        Double price;
+        Double price = 200.0;
         
           try {
             NumberFormat format = NumberFormat.getNumberInstance();
-            Number number = format.parse(seatsTxt.getText());
+            Number number = format.parse(priceTetx.getText());
             price = number.doubleValue();
 
           } catch (ParseException e) {
             JOptionPane.showMessageDialog(this, "Invalid input: Must be a valid price");
           }
+          
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, dyear);
+        calendar.set(Calendar.MONTH, dmonth - 1);
+        calendar.set(Calendar.DAY_OF_MONTH, dday);
+        Date date = new Date(calendar.getTimeInMillis());
+
+        Calendar calendarA = Calendar.getInstance();
+        calendarA.set(Calendar.YEAR, ayear);
+        calendarA.set(Calendar.MONTH, amonth-1);
+        calendarA.set(Calendar.DAY_OF_MONTH, aday);
+        Date dateA = new Date(calendarA.getTimeInMillis());
+          // sending to the database
+          try{
+              connectToDB();
+              PreparedStatement st =  connection.prepareStatement("INSERT INTO flyout.flights (flightID, departureCity,arrivalCity,departureDate,arrivalDate,price,adminUsername,seats) VALUES (?,?,?,?,?,?,?,?)");
+              st.setString(1, flightID);
+              st.setString(2, depart);
+              st.setString(3, arrival);
+              st.setDate(4, date);
+              st.setDate(5, dateA);
+              st.setDouble(6, price);
+              st.setString(7,admin.getUsername());
+              st.setInt(8, seats);
+              st.executeUpdate();
+              System.out.println("Informations have been sent successfully");
+          }
+          catch(SQLException e){
+              System.out.println("information have failed to be sent");
+              e.printStackTrace();
+          }
     }//GEN-LAST:event_addFlighButtonActionPerformed
 
+    public void connectToDB(){
+       try{
+       connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/flyout?zeroDateTimeBehavior=CONVERT_TO_NULL",
+               "root", "1234");
+       System.out.println("Connected");
+       } catch(SQLException e){
+           System.out.println("Unable to connect");
+           e.printStackTrace();
+       }
+    } 
+    public void disconnectFromDB() {
+    try {
+      connection.close();
+      System.out.println("Disconnected");
+    } catch (SQLException e) {
+      System.out.println("Unable to disconnect");
+      e.printStackTrace();
+    }
+  }
     private void validateDateD() {
         try {
             int day = Integer.parseInt(dDayText.getText());
