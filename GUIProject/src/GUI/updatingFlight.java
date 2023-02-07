@@ -1,12 +1,20 @@
 package GUI;
 import App.*;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
+import java.sql.*;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.Calendar;
 public class updatingFlight extends javax.swing.JFrame {
     Admin admin;
+    Connection connection;
+    int dday, dmonth, dyear, aday, amonth, ayear, seats;
     public updatingFlight(Admin ad) {
         admin = ad;
         initComponents();
-        addButton.setVisible(admin.getIsManager());
+        addingButton1.setVisible(admin.getIsManager());
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -22,17 +30,18 @@ public class updatingFlight extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JTextField();
-        jTextField6 = new javax.swing.JTextField();
-        jTextField7 = new javax.swing.JTextField();
-        jTextField8 = new javax.swing.JTextField();
-        jTextField9 = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
-        jTextField10 = new javax.swing.JTextField();
+        pricetxt = new javax.swing.JTextField();
+        dytxt = new javax.swing.JTextField();
+        flightTxt = new javax.swing.JTextField();
+        ddaytxt = new javax.swing.JTextField();
+        dmtxt = new javax.swing.JTextField();
+        adtxt = new javax.swing.JTextField();
+        amtxt = new javax.swing.JTextField();
+        aytxt = new javax.swing.JTextField();
+        arrivaltext = new javax.swing.JTextField();
+        updateDetails = new javax.swing.JButton();
+        departTXt = new javax.swing.JTextField();
+        seatstxt = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -139,74 +148,79 @@ public class updatingFlight extends javax.swing.JFrame {
         jPanel3.setBackground(new java.awt.Color(102, 102, 102));
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jTextField1.setBackground(new java.awt.Color(102, 102, 102));
-        jTextField1.setForeground(new java.awt.Color(255, 255, 255));
-        jTextField1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Price", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 15), new java.awt.Color(255, 255, 255))); // NOI18N
-        jPanel3.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, 140, 50));
+        pricetxt.setBackground(new java.awt.Color(102, 102, 102));
+        pricetxt.setForeground(new java.awt.Color(255, 255, 255));
+        pricetxt.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Price", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 15), new java.awt.Color(255, 255, 255))); // NOI18N
+        jPanel3.add(pricetxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, 140, 50));
 
-        jTextField2.setBackground(new java.awt.Color(102, 102, 102));
-        jTextField2.setForeground(new java.awt.Color(255, 255, 255));
-        jTextField2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Year", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 12), new java.awt.Color(255, 255, 255))); // NOI18N
-        jPanel3.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 60, 80, 50));
+        dytxt.setBackground(new java.awt.Color(102, 102, 102));
+        dytxt.setForeground(new java.awt.Color(255, 255, 255));
+        dytxt.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Year", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 12), new java.awt.Color(255, 255, 255))); // NOI18N
+        jPanel3.add(dytxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 60, 80, 50));
 
-        jTextField3.setBackground(new java.awt.Color(102, 102, 102));
-        jTextField3.setForeground(new java.awt.Color(255, 255, 255));
-        jTextField3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Flight ID", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 15), new java.awt.Color(255, 255, 255))); // NOI18N
-        jPanel3.add(jTextField3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 140, 50));
+        flightTxt.setBackground(new java.awt.Color(102, 102, 102));
+        flightTxt.setForeground(new java.awt.Color(255, 255, 255));
+        flightTxt.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Flight ID", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 15), new java.awt.Color(255, 255, 255))); // NOI18N
+        jPanel3.add(flightTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 140, 50));
 
-        jTextField4.setBackground(new java.awt.Color(102, 102, 102));
-        jTextField4.setForeground(new java.awt.Color(255, 255, 255));
-        jTextField4.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Day", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 12), new java.awt.Color(255, 255, 255))); // NOI18N
-        jPanel3.add(jTextField4, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 60, 80, 50));
+        ddaytxt.setBackground(new java.awt.Color(102, 102, 102));
+        ddaytxt.setForeground(new java.awt.Color(255, 255, 255));
+        ddaytxt.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Day", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 12), new java.awt.Color(255, 255, 255))); // NOI18N
+        jPanel3.add(ddaytxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 60, 80, 50));
 
-        jTextField5.setBackground(new java.awt.Color(102, 102, 102));
-        jTextField5.setForeground(new java.awt.Color(255, 255, 255));
-        jTextField5.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Month", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 12), new java.awt.Color(255, 255, 255))); // NOI18N
-        jPanel3.add(jTextField5, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 60, 80, 50));
+        dmtxt.setBackground(new java.awt.Color(102, 102, 102));
+        dmtxt.setForeground(new java.awt.Color(255, 255, 255));
+        dmtxt.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Month", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 12), new java.awt.Color(255, 255, 255))); // NOI18N
+        jPanel3.add(dmtxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 60, 80, 50));
 
-        jTextField6.setBackground(new java.awt.Color(102, 102, 102));
-        jTextField6.setForeground(new java.awt.Color(255, 255, 255));
-        jTextField6.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Day", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 12), new java.awt.Color(255, 255, 255))); // NOI18N
-        jPanel3.add(jTextField6, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 120, 80, 50));
+        adtxt.setBackground(new java.awt.Color(102, 102, 102));
+        adtxt.setForeground(new java.awt.Color(255, 255, 255));
+        adtxt.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Day", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 12), new java.awt.Color(255, 255, 255))); // NOI18N
+        jPanel3.add(adtxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 120, 80, 50));
 
-        jTextField7.setBackground(new java.awt.Color(102, 102, 102));
-        jTextField7.setForeground(new java.awt.Color(255, 255, 255));
-        jTextField7.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Month", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 12), new java.awt.Color(255, 255, 255))); // NOI18N
-        jPanel3.add(jTextField7, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 120, 80, 50));
+        amtxt.setBackground(new java.awt.Color(102, 102, 102));
+        amtxt.setForeground(new java.awt.Color(255, 255, 255));
+        amtxt.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Month", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 12), new java.awt.Color(255, 255, 255))); // NOI18N
+        jPanel3.add(amtxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 120, 80, 50));
 
-        jTextField8.setBackground(new java.awt.Color(102, 102, 102));
-        jTextField8.setForeground(new java.awt.Color(255, 255, 255));
-        jTextField8.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Year", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 12), new java.awt.Color(255, 255, 255))); // NOI18N
-        jPanel3.add(jTextField8, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 120, 80, 50));
+        aytxt.setBackground(new java.awt.Color(102, 102, 102));
+        aytxt.setForeground(new java.awt.Color(255, 255, 255));
+        aytxt.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Year", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 12), new java.awt.Color(255, 255, 255))); // NOI18N
+        jPanel3.add(aytxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 120, 80, 50));
 
-        jTextField9.setBackground(new java.awt.Color(102, 102, 102));
-        jTextField9.setForeground(new java.awt.Color(255, 255, 255));
-        jTextField9.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Arrival", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 15), new java.awt.Color(255, 255, 255))); // NOI18N
-        jPanel3.add(jTextField9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, 140, 50));
+        arrivaltext.setBackground(new java.awt.Color(102, 102, 102));
+        arrivaltext.setForeground(new java.awt.Color(255, 255, 255));
+        arrivaltext.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Arrival", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 15), new java.awt.Color(255, 255, 255))); // NOI18N
+        jPanel3.add(arrivaltext, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, 140, 50));
 
-        jButton2.setBackground(new java.awt.Color(204, 204, 204));
-        jButton2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jButton2.setText("UPDATE");
-        jButton2.setBorderPainted(false);
-        jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton2.setFocusPainted(false);
-        jButton2.setFocusable(false);
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        updateDetails.setBackground(new java.awt.Color(204, 204, 204));
+        updateDetails.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        updateDetails.setText("UPDATE");
+        updateDetails.setBorderPainted(false);
+        updateDetails.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        updateDetails.setFocusPainted(false);
+        updateDetails.setFocusable(false);
+        updateDetails.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                updateDetailsActionPerformed(evt);
             }
         });
-        jPanel3.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 200, 170, 40));
+        jPanel3.add(updateDetails, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 200, 160, 40));
 
-        jTextField10.setBackground(new java.awt.Color(102, 102, 102));
-        jTextField10.setForeground(new java.awt.Color(255, 255, 255));
-        jTextField10.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Depart", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 15), new java.awt.Color(255, 255, 255))); // NOI18N
-        jTextField10.addActionListener(new java.awt.event.ActionListener() {
+        departTXt.setBackground(new java.awt.Color(102, 102, 102));
+        departTXt.setForeground(new java.awt.Color(255, 255, 255));
+        departTXt.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Depart", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 15), new java.awt.Color(255, 255, 255))); // NOI18N
+        departTXt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField10ActionPerformed(evt);
+                departTXtActionPerformed(evt);
             }
         });
-        jPanel3.add(jTextField10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 140, 50));
+        jPanel3.add(departTXt, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 140, 50));
+
+        seatstxt.setBackground(new java.awt.Color(102, 102, 102));
+        seatstxt.setForeground(new java.awt.Color(255, 255, 255));
+        seatstxt.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Seats", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 15), new java.awt.Color(255, 255, 255))); // NOI18N
+        jPanel3.add(seatstxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 190, 100, 50));
 
         jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 170, 440, 280));
 
@@ -249,13 +263,130 @@ public class updatingFlight extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_addButtonActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void updateDetailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateDetailsActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+        String flightID = flightTxt.getText();
+        String departString = departTXt.getText();
+        String arrivalText = arrivaltext.getText();
+        Double price = 200.0;
+        
+          try {
+            NumberFormat format = NumberFormat.getNumberInstance();
+            Number number = format.parse(pricetxt.getText());
+            price = number.doubleValue();
 
-    private void jTextField10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField10ActionPerformed
+          } catch (ParseException e) {
+            JOptionPane.showMessageDialog(this, "Invalid input: Must be a valid price");
+          }
+        
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, dyear);
+        calendar.set(Calendar.MONTH, dmonth - 1);
+        calendar.set(Calendar.DAY_OF_MONTH, dday);
+        Date date = new Date(calendar.getTimeInMillis());
+
+        Calendar calendarA = Calendar.getInstance();
+        calendarA.set(Calendar.YEAR, ayear);
+        calendarA.set(Calendar.MONTH, amonth-1);
+        calendarA.set(Calendar.DAY_OF_MONTH, aday);
+        Date dateA = new Date(calendarA.getTimeInMillis());
+        
+        try{
+            connectToDB();
+            PreparedStatement st = connection.prepareStatement("UPDATE flyout.flights SET departureCity = ?, arrivalCity = ?, departureDate = ?, arrivalDate = ?, price = ?, adminUsername = ?, seats = ? WHERE flightID = ?");
+            st.setString(1, departString);
+            st.setString(2, arrivalText);
+            st.setDate(3, date);
+            st.setDate(4, dateA);
+            st.setDouble(5, price);
+            st.setString(6, admin.getUsername());
+            st.setInt(7, seats);
+            st.setString(8, flightID);            
+            int rowsAffected = st.executeUpdate();
+            System.out.println("Rows affected: " + rowsAffected);
+            st.close();
+            disconnectFromDB();
+        } catch(SQLException e){
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_updateDetailsActionPerformed
+    private void validateDateD() {
+        try {
+            int day = Integer.parseInt(ddaytxt.getText());
+            int month = Integer.parseInt(dmtxt.getText());
+            int year = Integer.parseInt(dytxt.getText());
+            int sets = Integer.parseInt(seatstxt.getText());
+
+            if (day < 1 || day > 31) {
+                throw new Exception("Day must be between 1 and 31");
+            }
+            if (month < 1 || month > 12) {
+                throw new Exception("Month must be between 1 and 12");
+            }
+            if (year < 0) {
+                throw new Exception("Year must be positive");
+            }
+            if ((sets < 0) || (sets >= 120))
+                throw new Exception("Seats must be between 1 and 120");
+            //JOptionPane.showMessageDialog(this, "Valid date");
+            dday = day;
+            dmonth = month;
+            dyear = year;
+            seats = sets;
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Invalid input: Must be an integer");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }
+    private void validateDateA() {
+        try {
+            int day = Integer.parseInt(adtxt.getText());
+            int month = Integer.parseInt(amtxt.getText());
+            int year = Integer.parseInt(aytxt.getText());
+
+            if (day < 1 || day > 31) {
+                throw new Exception("Day must be between 1 and 31");
+            }
+            if (month < 1 || month > 12) {
+                throw new Exception("Month must be between 1 and 12");
+            }
+            if (year < 0) {
+                throw new Exception("Year must be positive");
+            }
+
+            //JOptionPane.showMessageDialog(this, "Valid date");
+            aday = day;
+            amonth = month;
+            ayear = year;
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Invalid input: Must be an integer");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }
+    public void connectToDB(){
+       try{
+       connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/flyout?zeroDateTimeBehavior=CONVERT_TO_NULL",
+               "root", "1234");
+       System.out.println("Connected");
+       } catch(SQLException e){
+           System.out.println("Unable to connect");
+           e.printStackTrace();
+       }
+    } 
+    public void disconnectFromDB() {
+    try {
+      connection.close();
+      System.out.println("Disconnected");
+    } catch (SQLException e) {
+      System.out.println("Unable to disconnect");
+      e.printStackTrace();
+    }
+  }
+    private void departTXtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_departTXtActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField10ActionPerformed
+    }//GEN-LAST:event_departTXtActionPerformed
 
     private void addingButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addingButton1ActionPerformed
         // TODO add your handling code here:
@@ -270,24 +401,25 @@ public class updatingFlight extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addButton;
     private javax.swing.JButton addingButton1;
+    private javax.swing.JTextField adtxt;
+    private javax.swing.JTextField amtxt;
+    private javax.swing.JTextField arrivaltext;
+    private javax.swing.JTextField aytxt;
     private javax.swing.JPanel darkLabelCustomer;
+    private javax.swing.JTextField ddaytxt;
     private javax.swing.JButton deleteButton;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JTextField departTXt;
+    private javax.swing.JTextField dmtxt;
+    private javax.swing.JTextField dytxt;
+    private javax.swing.JTextField flightTxt;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField10;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
-    private javax.swing.JTextField jTextField8;
-    private javax.swing.JTextField jTextField9;
     private javax.swing.JButton logoutButton;
+    private javax.swing.JTextField pricetxt;
+    private javax.swing.JTextField seatstxt;
     private javax.swing.JButton updateButton;
+    private javax.swing.JButton updateDetails;
     // End of variables declaration//GEN-END:variables
 }

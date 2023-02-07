@@ -8,7 +8,7 @@ public class deletingDashboard extends javax.swing.JFrame {
     public deletingDashboard(Admin ad) {
         admin = ad;
         initComponents();
-        addButton.setVisible(admin.getIsManager());
+        addingButton1.setVisible(admin.getIsManager());
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
