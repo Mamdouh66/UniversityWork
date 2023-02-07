@@ -6,6 +6,26 @@ public class Flight {
     private String flightArrivingDate;
     private double flightPrice;
     private String flightID;
+    private int seats;
+    private String admin;
+
+    public void setSeats(int seats) {
+        this.seats = seats;
+    }
+
+    public int getSeats() {
+        return seats;
+    }
+
+    public String getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(String admin) {
+        this.admin = admin;
+    }
+    
+    
 
     public String getFlightArrivingCity() {
         return flightArrivingCity;

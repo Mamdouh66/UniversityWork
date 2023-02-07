@@ -44,6 +44,7 @@ public class updatingFlight extends javax.swing.JFrame {
         seatstxt = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         darkLabelCustomer.setBackground(new java.awt.Color(70, 70, 70));
@@ -269,6 +270,9 @@ public class updatingFlight extends javax.swing.JFrame {
         String departString = departTXt.getText();
         String arrivalText = arrivaltext.getText();
         Double price = 200.0;
+        
+        validateDateD();
+        validateDateA();
         
           try {
             NumberFormat format = NumberFormat.getNumberInstance();
