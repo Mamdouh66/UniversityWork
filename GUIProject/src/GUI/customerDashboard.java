@@ -3,6 +3,8 @@ import App.*;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileWriter;
+import java.io.IOException;
 import javax.swing.JLabel;
 import javax.swing.Timer;
 import java.time.LocalDate;
@@ -11,6 +13,8 @@ import java.util.Locale;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 public class customerDashboard extends javax.swing.JFrame {
     String customerFirstName;
     private String text;
@@ -33,6 +37,9 @@ public class customerDashboard extends javax.swing.JFrame {
 
    Customer currentCustomer;
    private JScrollPane scrollPane;
+   
+   private static final String LOG_FILE = "log.txt";
+   private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         
     
     public customerDashboard(){
@@ -83,9 +90,24 @@ public class customerDashboard extends javax.swing.JFrame {
         } catch(SQLException e){
             e.printStackTrace();
         }
+        
         jLabel4.setText(day);
         jLabel5.setText(date);
         printActivities(historyPanel);
+        
+        log(currentCustomer.getUsername() + " has just logged in");
+        
+    }
+    
+    public static void log(String message) {
+        LocalDateTime now = LocalDateTime.now();
+        String logLine = now.format(FORMATTER) + ": " + message + System.lineSeparator();
+
+        try (FileWriter writer = new FileWriter(LOG_FILE, true)) {
+            writer.append(logLine);
+        } catch (IOException e) {
+            System.err.println("Error writing to log file: " + e.getMessage());
+        }
     }
 
    public void connectToDB(){
