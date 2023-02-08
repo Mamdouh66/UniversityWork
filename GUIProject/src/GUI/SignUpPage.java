@@ -2,11 +2,15 @@
 package GUI;
 import App.*;
 import App.Customer;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import java.sql.*;
 import java.security.Key;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import java.util.Base64;
@@ -298,11 +302,23 @@ public class SignUpPage extends javax.swing.JFrame {
                 customerDashboard p = new customerDashboard(currentUser);
                 p.setVisible(true);
                 dispose();
+                log(currentUser.getUsername() + " has created an account");
             }
         }
         }
     }//GEN-LAST:event_signUpButtonActionPerformed
+    private static final String LOG_FILE = "log.txt";
+   private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    public static void log(String message) {
+        LocalDateTime now = LocalDateTime.now();
+        String logLine = now.format(FORMATTER) + ": " + message + System.lineSeparator();
 
+        try (FileWriter writer = new FileWriter(LOG_FILE, true)) {
+            writer.append(logLine);
+        } catch (IOException e) {
+            System.err.println("Error writing to log file: " + e.getMessage());
+        }
+    }
     // encrypt password
     private static final String ALGO = "AES";
     private static final byte[] keyValue =

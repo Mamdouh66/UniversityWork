@@ -2,10 +2,14 @@ package GUI;
 
 import javax.swing.JOptionPane;
 import App.*;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class TicketsDashboard extends javax.swing.JFrame {
 
     Customer currentCustomer;
@@ -72,8 +76,7 @@ public class TicketsDashboard extends javax.swing.JFrame {
         depLabel = new javax.swing.JLabel();
         depDateLabel = new javax.swing.JLabel();
         arrivalDateLabel = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
+        deleteFlightButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -219,25 +222,20 @@ public class TicketsDashboard extends javax.swing.JFrame {
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 170, 440, 180));
 
-        jButton2.setBackground(new java.awt.Color(153, 0, 0));
-        jButton2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jButton2.setText("DELETE");
-        jButton2.setBorderPainted(false);
-        jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton2.setFocusPainted(false);
-        jButton2.setFocusable(false);
-        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 360, 130, 30));
-
-        jButton7.setBackground(new java.awt.Color(51, 51, 51));
-        jButton7.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jButton7.setForeground(new java.awt.Color(255, 255, 255));
-        jButton7.setText("PRINT");
-        jButton7.setBorderPainted(false);
-        jButton7.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton7.setFocusPainted(false);
-        jButton7.setFocusable(false);
-        jPanel1.add(jButton7, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 360, 130, 30));
+        deleteFlightButton.setBackground(new java.awt.Color(153, 0, 0));
+        deleteFlightButton.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        deleteFlightButton.setForeground(new java.awt.Color(255, 255, 255));
+        deleteFlightButton.setText("DELETE");
+        deleteFlightButton.setBorderPainted(false);
+        deleteFlightButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        deleteFlightButton.setFocusPainted(false);
+        deleteFlightButton.setFocusable(false);
+        deleteFlightButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteFlightButtonActionPerformed(evt);
+            }
+        });
+        jPanel1.add(deleteFlightButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 360, 130, 30));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 0, 520, 560));
 
@@ -286,6 +284,34 @@ public class TicketsDashboard extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_homeButtonActionPerformed
 
+    private void deleteFlightButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteFlightButtonActionPerformed
+        // TODO add your handling code here:
+        try{
+            connectToDB();
+            PreparedStatement pts = connection.prepareStatement("SELECT * FROM flyout.booking WHERE passengerUsername = ?");
+            pts.setString(1, currentCustomer.getUsername());
+            ResultSet rs = pts.executeQuery();
+            if (rs.next()){
+                int result = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete?", "Confirmation", JOptionPane.YES_NO_OPTION);
+                if (result == JOptionPane.YES_OPTION) {
+                    // User clicked "Yes"
+                    PreparedStatement st = connection.prepareStatement("DELETE FROM flyout.booking WHERE passengerUsername = ?");
+                    st.setString(1, currentCustomer.getUsername());
+                    int rowsDeleted = st.executeUpdate();
+                    System.out.println(rowsDeleted + " row(s) deleted.");
+                    log(currentCustomer.getUsername() + " Cancelled flight with id " + flight.getFlightID());
+                    TicketsDashboard p = new TicketsDashboard(currentCustomer);
+                    p.setVisible(true);
+                    dispose();
+                }
+            } else{
+                JOptionPane.showMessageDialog(null, "You have no booked flight");
+            }
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_deleteFlightButtonActionPerformed
+
 public void connectToDB(){
        try{
        connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/flyout?zeroDateTimeBehavior=CONVERT_TO_NULL",
@@ -305,18 +331,30 @@ public void connectToDB(){
       e.printStackTrace();
     }
   }
+    
+    private static final String LOG_FILE = "log.txt";
+   private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    public static void log(String message) {
+        LocalDateTime now = LocalDateTime.now();
+        String logLine = now.format(FORMATTER) + ": " + message + System.lineSeparator();
+
+        try (FileWriter writer = new FileWriter(LOG_FILE, true)) {
+            writer.append(logLine);
+        } catch (IOException e) {
+            System.err.println("Error writing to log file: " + e.getMessage());
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel arrLabel;
     private javax.swing.JLabel arrivalDateLabel;
     private javax.swing.JPanel darkLabelCustomer;
+    private javax.swing.JButton deleteFlightButton;
     private javax.swing.JLabel depDateLabel;
     private javax.swing.JLabel depLabel;
     private javax.swing.JButton flightsButton;
     private javax.swing.JButton homeButton;
     private javax.swing.JLabel idLabel;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

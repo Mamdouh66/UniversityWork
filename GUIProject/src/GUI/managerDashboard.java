@@ -1,9 +1,13 @@
 package GUI;
 import App.*;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 public class managerDashboard extends javax.swing.JFrame {
     
     Admin bigBoss;
@@ -252,6 +256,7 @@ public class managerDashboard extends javax.swing.JFrame {
             st.setString(6, phoneNumber);
             st.setBoolean(7, false);
             st.executeUpdate();
+            log("Managere added new admin " + username);
             System.out.println("Informations have been sent successfully");
         } catch(SQLException e){
             e.printStackTrace();
@@ -284,6 +289,18 @@ public class managerDashboard extends javax.swing.JFrame {
       e.printStackTrace();
     }
   }
+     private static final String LOG_FILE = "log.txt";
+   private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    public static void log(String message) {
+        LocalDateTime now = LocalDateTime.now();
+        String logLine = now.format(FORMATTER) + ": " + message + System.lineSeparator();
+
+        try (FileWriter writer = new FileWriter(LOG_FILE, true)) {
+            writer.append(logLine);
+        } catch (IOException e) {
+            System.err.println("Error writing to log file: " + e.getMessage());
+        }
+    }
     private void passwordTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordTextFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_passwordTextFieldActionPerformed

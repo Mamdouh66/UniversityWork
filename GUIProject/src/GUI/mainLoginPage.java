@@ -11,7 +11,11 @@ import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import App.*;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.security.Key;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
@@ -257,12 +261,13 @@ public class mainLoginPage extends javax.swing.JFrame {
                 String lastName = resultSet.getString("passengerLastName");
                 String phoneNumber = resultSet.getString("passengerPhone");
                 String passHistory = resultSet.getString("passengerHistory");
-                double wallet = resultSet.getDouble("passengerWallet");
+                int wallet = (int)resultSet.getDouble("passengerWallet");
                 System.out.println(correctPassword);
                 // check if username and password match the stored values
                     if (new String(passwordVal).equals(correctPassword)) {
         //                JOptionPane.showMessageDialog(null, "Login successful!");
                             Customer customer = new Customer(firstName,lastName,password,correctEmail,phoneNumber,username,passHistory);
+                            log(username + " has logged in");
                             customerDashboard p = new customerDashboard(customer);
                             p.setVisible(true);
                             dispose();
@@ -281,7 +286,8 @@ public class mainLoginPage extends javax.swing.JFrame {
 
                     if (new String(passwordVal).equals(correctedPassword)){
                         Admin admin = new Admin(adminFName, adminLName, username, correctedPassword, adminPhone, adminEmail, admingIsManager);
-                        managerDashboard p = new managerDashboard(admin);
+                        log(username + " has logged in");
+                        AdminDashboard p = new AdminDashboard(admin);
                         p.setVisible(true);
                         dispose();
                         }  
@@ -335,6 +341,19 @@ public class mainLoginPage extends javax.swing.JFrame {
         byte[] decordedValue = Base64.getDecoder().decode(encryptedData);
         byte[] decValue = c.doFinal(decordedValue);
         return new String(decValue);
+    }
+       
+       private static final String LOG_FILE = "log.txt";
+   private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    public static void log(String message) {
+        LocalDateTime now = LocalDateTime.now();
+        String logLine = now.format(FORMATTER) + ": " + message + System.lineSeparator();
+
+        try (FileWriter writer = new FileWriter(LOG_FILE, true)) {
+            writer.append(logLine);
+        } catch (IOException e) {
+            System.err.println("Error writing to log file: " + e.getMessage());
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

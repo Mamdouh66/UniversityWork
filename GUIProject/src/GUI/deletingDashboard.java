@@ -1,7 +1,11 @@
 package GUI;
 import App.*;
+import java.io.FileWriter;
+import java.io.IOException;
 import javax.swing.JOptionPane;
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 public class deletingDashboard extends javax.swing.JFrame {
     Admin admin;
     Connection connection;
@@ -376,6 +380,7 @@ public class deletingDashboard extends javax.swing.JFrame {
             if (rs.next()){
                 PreparedStatement st = connection.prepareStatement("DELETE FROM flyout.flights WHERE flightID = ?");
                 st.setString(1, flightID);
+                log(admin.getUsername() + " admin have deleted flight information");
                 int rowsDeleted = st.executeUpdate();
                 System.out.println(rowsDeleted + " row(s) deleted.");
             } else{
@@ -447,7 +452,18 @@ public void connectToDB(){
             dispose();
         }
     }//GEN-LAST:event_addingButton1ActionPerformed
+private static final String LOG_FILE = "log.txt";
+   private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    public static void log(String message) {
+        LocalDateTime now = LocalDateTime.now();
+        String logLine = now.format(FORMATTER) + ": " + message + System.lineSeparator();
 
+        try (FileWriter writer = new FileWriter(LOG_FILE, true)) {
+            writer.append(logLine);
+        } catch (IOException e) {
+            System.err.println("Error writing to log file: " + e.getMessage());
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addButton;

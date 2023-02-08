@@ -1,11 +1,15 @@
 package GUI;
 import App.*;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import java.sql.*;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 public class updatingFlight extends javax.swing.JFrame {
     Admin admin;
@@ -307,6 +311,7 @@ public class updatingFlight extends javax.swing.JFrame {
             st.setInt(7, seats);
             st.setString(8, flightID);            
             int rowsAffected = st.executeUpdate();
+            log(admin.getUsername() + " have updated a fligh");
             System.out.println("Rows affected: " + rowsAffected);
             st.close();
             disconnectFromDB();
@@ -401,7 +406,18 @@ public class updatingFlight extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_addingButton1ActionPerformed
 
+private static final String LOG_FILE = "log.txt";
+   private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    public static void log(String message) {
+        LocalDateTime now = LocalDateTime.now();
+        String logLine = now.format(FORMATTER) + ": " + message + System.lineSeparator();
 
+        try (FileWriter writer = new FileWriter(LOG_FILE, true)) {
+            writer.append(logLine);
+        } catch (IOException e) {
+            System.err.println("Error writing to log file: " + e.getMessage());
+        }
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addButton;
     private javax.swing.JButton addingButton1;

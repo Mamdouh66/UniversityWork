@@ -1,9 +1,13 @@
 package GUI;
 import javax.swing.JOptionPane;
 import App.*;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class WalletsDashboard extends javax.swing.JFrame {
     Connection connection;
@@ -29,7 +33,7 @@ public class WalletsDashboard extends javax.swing.JFrame {
         } catch (SQLException e){
             e.printStackTrace();
         }
-        moneyLabel.setText(customerWallet.getWalletMoney() + " Riyals");
+        moneyLabel.setText(Math.round(customerWallet.getWalletMoney()) + " Riyals");
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -55,6 +59,7 @@ public class WalletsDashboard extends javax.swing.JFrame {
         addMoneyButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(720, 560));
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -177,6 +182,11 @@ public class WalletsDashboard extends javax.swing.JFrame {
 
         cardNumberTxt.setBackground(new java.awt.Color(242, 242, 242));
         cardNumberTxt.setBorder(javax.swing.BorderFactory.createTitledBorder("Card Number"));
+        cardNumberTxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cardNumberTxtActionPerformed(evt);
+            }
+        });
         jPanel3.add(cardNumberTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 290, 50));
 
         CardHolderNameTxt.setBackground(new java.awt.Color(242, 242, 242));
@@ -213,7 +223,7 @@ public class WalletsDashboard extends javax.swing.JFrame {
 
         jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 270, 410, 220));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 0, 780, 560));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 0, 760, 560));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -298,6 +308,7 @@ public class WalletsDashboard extends javax.swing.JFrame {
                         pst.setString(2, currentCustomer.getUsername());
                         int rowsAffectede = pst.executeUpdate();
                         System.out.println("Rows affected: " + rowsAffectede);
+                        log(currentCustomer.getUsername() + " has added money to waller " + customerWallet.getWalletMoney() + " Riyals");
                         st.close();
                         disconnectFromDB();
                     } catch (SQLException e){
@@ -318,6 +329,10 @@ public class WalletsDashboard extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_expDateTxtActionPerformed
 
+    private void cardNumberTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cardNumberTxtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cardNumberTxtActionPerformed
+
 public void connectToDB(){
        try{
        connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/flyout?zeroDateTimeBehavior=CONVERT_TO_NULL",
@@ -337,6 +352,18 @@ public void connectToDB(){
       e.printStackTrace();
     }
   }
+    private static final String LOG_FILE = "log.txt";
+   private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    public static void log(String message) {
+        LocalDateTime now = LocalDateTime.now();
+        String logLine = now.format(FORMATTER) + ": " + message + System.lineSeparator();
+
+        try (FileWriter writer = new FileWriter(LOG_FILE, true)) {
+            writer.append(logLine);
+        } catch (IOException e) {
+            System.err.println("Error writing to log file: " + e.getMessage());
+        }
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField CardHolderNameTxt;
     private javax.swing.JButton addMoneyButton;
