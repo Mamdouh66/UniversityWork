@@ -285,6 +285,19 @@ public class WalletsDashboard extends javax.swing.JFrame {
                         st.setString(2, currentCustomer.getUsername());
                         int rowsAffected = st.executeUpdate();
                         System.out.println("Rows affected: " + rowsAffected);
+                        PreparedStatement psts = connection.prepareStatement("SELECT * FROM flyout.passengers WHERE passengerUsername = ?");
+                        psts.setString(1, currentCustomer.getUsername());
+                        String history ="";
+                        ResultSet rs = psts.executeQuery();
+                        if(rs.next()){
+                            history = rs.getString("passengerHistory");
+                        }
+                        history += "- You have added money to your wallet,";
+                        PreparedStatement pst = connection.prepareStatement("UPDATE flyout.passengers SET passengerHistory = ? WHERE passengerUsername = ?");
+                        pst.setString(1,history);
+                        pst.setString(2, currentCustomer.getUsername());
+                        int rowsAffectede = pst.executeUpdate();
+                        System.out.println("Rows affected: " + rowsAffectede);
                         st.close();
                         disconnectFromDB();
                     } catch (SQLException e){

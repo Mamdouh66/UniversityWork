@@ -1,5 +1,4 @@
 package App;
-
 import javax.swing.text.PasswordView;
 
 public class Customer extends User{
