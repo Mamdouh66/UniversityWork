@@ -174,6 +174,7 @@ public class tableForm extends javax.swing.JFrame {
       }
       if(isThere){
           // check if customer has enough money to buy or not
+          
       }else{
           JOptionPane.showMessageDialog(null, "ID isn't found");
       }

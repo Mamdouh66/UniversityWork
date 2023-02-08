@@ -1,18 +1,35 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package GUI;
-
 import javax.swing.JOptionPane;
 import App.*;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.*;
 
 public class WalletsDashboard extends javax.swing.JFrame {
-    
+    Connection connection;
     Customer currentCustomer;
+    Wallet customerWallet;
     public WalletsDashboard(Customer customer) {
-        currentCustomer = customer;
         initComponents();
+        currentCustomer = customer;
+        customerWallet = new Wallet();
+        customerWallet.setUsername(currentCustomer.getUsername());
+        customerWallet.setCustomerFirstName(currentCustomer.getCustomerFirstName());
+        customerWallet.setCustomerLastName(currentCustomer.getCustomerLastName());
+        try{
+            connectToDB();
+            PreparedStatement st = connection.prepareStatement("SELECT passengerWallet FROM flyout.passengers WHERE passengerUsername = '" +currentCustomer.getUsername() +"'");
+            ResultSet rs = st.executeQuery();
+            if(rs.next()){
+                double wallet = Double.parseDouble(rs.getString("passengerWallet"));
+                customerWallet.setWalletMoney(wallet);
+            } else{
+                System.out.println("Username haven't been found");
+            }
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+        moneyLabel.setText(customerWallet.getWalletMoney() + " Riyals");
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -28,14 +45,14 @@ public class WalletsDashboard extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        moneyLabel = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
+        secDate = new javax.swing.JTextField();
+        cardNumberTxt = new javax.swing.JTextField();
+        CardHolderNameTxt = new javax.swing.JTextField();
+        expDateTxt = new javax.swing.JTextField();
+        addMoneyButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -143,9 +160,8 @@ public class WalletsDashboard extends javax.swing.JFrame {
         jLabel1.setText("Your Current Wallet");
         jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 3, 24)); // NOI18N
-        jLabel3.setText("0.0 Riyals");
-        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 60, 210, 50));
+        moneyLabel.setFont(new java.awt.Font("Segoe UI", 3, 24)); // NOI18N
+        jPanel2.add(moneyLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 60, 250, 50));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 50, 410, 150));
 
@@ -155,31 +171,45 @@ public class WalletsDashboard extends javax.swing.JFrame {
 
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jTextField1.setBackground(new java.awt.Color(242, 242, 242));
-        jTextField1.setBorder(javax.swing.BorderFactory.createTitledBorder("Security Code"));
-        jPanel3.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 140, 110, 50));
+        secDate.setBackground(new java.awt.Color(242, 242, 242));
+        secDate.setBorder(javax.swing.BorderFactory.createTitledBorder("Security Code"));
+        jPanel3.add(secDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 140, 110, 50));
 
-        jTextField2.setBackground(new java.awt.Color(242, 242, 242));
-        jTextField2.setBorder(javax.swing.BorderFactory.createTitledBorder("Card Number"));
-        jPanel3.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 290, 50));
+        cardNumberTxt.setBackground(new java.awt.Color(242, 242, 242));
+        cardNumberTxt.setBorder(javax.swing.BorderFactory.createTitledBorder("Card Number"));
+        jPanel3.add(cardNumberTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 290, 50));
 
-        jTextField3.setBackground(new java.awt.Color(242, 242, 242));
-        jTextField3.setBorder(javax.swing.BorderFactory.createTitledBorder("Card Holder's Name"));
-        jPanel3.add(jTextField3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 290, 50));
+        CardHolderNameTxt.setBackground(new java.awt.Color(242, 242, 242));
+        CardHolderNameTxt.setBorder(javax.swing.BorderFactory.createTitledBorder("Card Holder's Name"));
+        jPanel3.add(CardHolderNameTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 290, 50));
 
-        jTextField4.setBackground(new java.awt.Color(242, 242, 242));
-        jTextField4.setBorder(javax.swing.BorderFactory.createTitledBorder("Expirition Date"));
-        jPanel3.add(jTextField4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 140, 110, 50));
+        expDateTxt.setBackground(new java.awt.Color(242, 242, 242));
+        expDateTxt.setText("02/2023");
+        expDateTxt.setToolTipText("should be : month/year");
+        expDateTxt.setBorder(javax.swing.BorderFactory.createTitledBorder("Expirition Date"));
+        expDateTxt.setName(""); // NOI18N
+        expDateTxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                expDateTxtActionPerformed(evt);
+            }
+        });
+        jPanel3.add(expDateTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 140, 110, 50));
+        expDateTxt.getAccessibleContext().setAccessibleDescription("");
 
-        jButton2.setBackground(new java.awt.Color(51, 51, 51));
-        jButton2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jButton2.setText("ADD");
-        jButton2.setBorderPainted(false);
-        jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton2.setFocusPainted(false);
-        jButton2.setFocusable(false);
-        jPanel3.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 150, 120, 40));
+        addMoneyButton.setBackground(new java.awt.Color(51, 51, 51));
+        addMoneyButton.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        addMoneyButton.setForeground(new java.awt.Color(255, 255, 255));
+        addMoneyButton.setText("ADD");
+        addMoneyButton.setBorderPainted(false);
+        addMoneyButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        addMoneyButton.setFocusPainted(false);
+        addMoneyButton.setFocusable(false);
+        addMoneyButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addMoneyButtonActionPerformed(evt);
+            }
+        });
+        jPanel3.add(addMoneyButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 150, 120, 40));
 
         jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 270, 410, 220));
 
@@ -231,24 +261,86 @@ public class WalletsDashboard extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_flightsButtonActionPerformed
 
+    private void addMoneyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMoneyButtonActionPerformed
+        // TODO add your handling code here:
+        String cardHolderName = CardHolderNameTxt.getText();
+        String cardNumber = cardNumberTxt.getText();
+        String expDate = expDateTxt.getText();
+        String securiyCode = secDate.getText();
+        
+        if(customerWallet.isInputValid(cardNumber, expDate)){
+            if(customerWallet.isValid(cardNumber, expDate)){
+                String input = JOptionPane.showInputDialog("Enter the amount of money to be taken:");
+                int amount = Integer.parseInt(input);
+                int confirmation = JOptionPane.showConfirmDialog(null, "Are you sure you want to put " + amount + "?","Confirm", JOptionPane.YES_NO_OPTION);
+                if (confirmation == JOptionPane.YES_OPTION) {
+                    JOptionPane.showMessageDialog(null, "Transaction completed");
+                    customerWallet.setWalletMoney(amount);
+                    int curMoney = (int)customerWallet.getWalletMoney();
+                    moneyLabel.setText(String.valueOf(curMoney) + " Riyals");
+                    try{
+                        connectToDB();
+                        PreparedStatement st = connection.prepareStatement("UPDATE flyout.passengers SET passengerWallet = ? WHERE passengerUsername = ?");
+                        st.setDouble(1, curMoney);
+                        st.setString(2, currentCustomer.getUsername());
+                        int rowsAffected = st.executeUpdate();
+                        System.out.println("Rows affected: " + rowsAffected);
+                        st.close();
+                        disconnectFromDB();
+                    } catch (SQLException e){
+                        e.printStackTrace();
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Transaction cancelled");
+                }
+            } else{
+                JOptionPane.showMessageDialog(null, "Make sure your card is a Visa, Mastercard, AmericanExpress card");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Input is valid\n make sure exp date is month/year \n make sure to provide a correct card number");
+        }
+    }//GEN-LAST:event_addMoneyButtonActionPerformed
 
+    private void expDateTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_expDateTxtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_expDateTxtActionPerformed
+
+public void connectToDB(){
+       try{
+       connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/flyout?zeroDateTimeBehavior=CONVERT_TO_NULL",
+               "root", "1234");
+       System.out.println("Connected");
+       } catch(SQLException e){
+           System.out.println("Unable to connect");
+           e.printStackTrace();
+       }
+    } 
+    public void disconnectFromDB() {
+    try {
+      connection.close();
+      System.out.println("Disconnected");
+    } catch (SQLException e) {
+      System.out.println("Unable to disconnect");
+      e.printStackTrace();
+    }
+  }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField CardHolderNameTxt;
+    private javax.swing.JButton addMoneyButton;
+    private javax.swing.JTextField cardNumberTxt;
     private javax.swing.JPanel darkLabelCustomer;
+    private javax.swing.JTextField expDateTxt;
     private javax.swing.JButton flightsButton;
     private javax.swing.JButton homeButton;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
     private javax.swing.JButton logoutButton;
+    private javax.swing.JLabel moneyLabel;
+    private javax.swing.JTextField secDate;
     private javax.swing.JButton ticketsButton;
     private javax.swing.JButton walletsButton;
     // End of variables declaration//GEN-END:variables

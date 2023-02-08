@@ -2,6 +2,10 @@ package App;
 import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import javax.swing.JOptionPane;
 
 public class Wallet extends Customer{
     private double walletMoney;
@@ -9,6 +13,7 @@ public class Wallet extends Customer{
     private String cardHolderName;
     private String cardExperationDate;
     private String cardSecurityNumber;
+    
 
     public String getCardExperationDate() {
         return cardExperationDate;
@@ -112,25 +117,34 @@ public class Wallet extends Customer{
     }
 
     public void setWalletMoney(double walletMoney) {
-        this.walletMoney = walletMoney;
+        this.walletMoney += walletMoney;
     }
     
     public static boolean isValid(String number, String expDate) {
-        // Input validation
-        if (!isInputValid(number, expDate)) {
-            return false;
-        }
 
         // Check for expired cards
-        Calendar currentDate = Calendar.getInstance();
-        Calendar expiryDate = Calendar.getInstance();
-        int expMonth = Integer.parseInt(expDate.substring(0,2));
-        int expYear = Integer.parseInt(expDate.substring(3,5)) + 2000;
-        expiryDate.set(expYear, expMonth, 1);
-        if(currentDate.after(expiryDate)){
+//        Calendar currentDate = Calendar.getInstance();
+//        Calendar expiryDate = Calendar.getInstance();
+//        int expMonth = Integer.parseInt(expDate.substring(0,2));
+//        int expYear = Integer.parseInt(expDate.substring(3,5)) + 2000;
+//        expiryDate.set(expYear, expMonth, 1);
+//        if(currentDate.after(expiryDate)){
+//            return false;
+//        }
+        
+        SimpleDateFormat formatter = new SimpleDateFormat("MM/yyyy");
+        try {
+          Date date = formatter.parse(expDate);
+          Calendar cal = Calendar.getInstance();
+          cal.setTime(date);
+          Calendar currentCalendar = Calendar.getInstance();
+          if (cal.before(currentCalendar)) {
+            JOptionPane.showMessageDialog(null, "The date has expired.");
             return false;
+          }
+        } catch (Exception e) {
+          JOptionPane.showMessageDialog(null, "Invalid date format.");
         }
-
         int sum = 0;
         boolean alternate = false;
         for (int i = number.length() - 1; i >= 0; i--) {
