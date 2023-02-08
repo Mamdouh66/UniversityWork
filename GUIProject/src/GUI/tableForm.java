@@ -6,6 +6,10 @@ import javax.swing.JTable;
 import java.sql.*;
 import javax.swing.table.DefaultTableModel;
 import App.*;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import javax.swing.JOptionPane;
 
 public class tableForm extends javax.swing.JFrame {
@@ -13,6 +17,7 @@ public class tableForm extends javax.swing.JFrame {
     Customer cust;
     Flight flight;
     ResultSet rs;
+    DefaultTableModel model;
     public tableForm(Flight flight, Customer cust) {
         initComponents();
         this.cust = cust;
@@ -22,7 +27,7 @@ public class tableForm extends javax.swing.JFrame {
         Statement st = connection.createStatement();
         String query = "SELECT * FROM flyout.flights WHERE departureCity = '" + flight.getFlightDepartingCity() + "' AND arrivalCity = '"+ flight.getFlightArrivingCity() +"' AND departureDate = '" + flight.getFlightDepartingDate() + "' AND arrivalDate = '" + flight.getFlightArrivingDate() + "'" ;
         rs = st.executeQuery(query);
-        DefaultTableModel model = (DefaultTableModel)jTable1.getModel();
+        model = (DefaultTableModel)jTable1.getModel();
         while(rs.next()){
             model.addRow(new Object[]{rs.getString("flightID"), rs.getString("departureCity"), rs.getString("arrivalCity"), rs.getString("departureDate"), rs.getString("arrivalDate"), rs.getString("price"), rs.getString("seats")});
         }
@@ -156,30 +161,82 @@ public class tableForm extends javax.swing.JFrame {
         // TODO add your handling code here:
         String id = jTextField1.getText();
         boolean isThere = false;
-        try{
-        while(rs.next()){
-            if (rs.getString("flightID").equals(id)){
-                flight.setFlightArrivingCity(rs.getString("arrivalCity"));
-                flight.setFlightDepartingCity(rs.getString("departureCity"));
-                flight.setFlightDepartingDate(rs.getString("departureDate"));
-                flight.setFlightArrivingDate(rs.getString("arrivalDate"));
-                flight.setFlightPrice(rs.getDouble("price"));
-                flight.setSeats(rs.getInt("seats"));
-                flight.setAdmin("adminUsername");
+        for (int row = 0; row < model.getRowCount(); row++) {
+            if (model.getValueAt(row, 0).equals(id)) {
                 isThere = true;
+                System.out.println(isThere);
+                try{
+                    connectToDB();
+                    PreparedStatement stmt = connection.prepareStatement("SELECT * FROM flyout.flights WHERE flightID = ? ");
+                    stmt.setString(1,id);
+                    ResultSet rsts = stmt.executeQuery();
+                    if(rsts.next()){
+                        flight.setFlightID(rsts.getString("flightID"));
+                        flight.setFlightPrice(rsts.getDouble("price"));
+                    }
+                    disconnectFromDB();
+                } catch (SQLException e){
+                    e.printStackTrace();
+                }
             }
-        }
-      } catch (SQLException e){
-          e.printStackTrace();
-      }
+        }      
       if(isThere){
           // check if customer has enough money to buy or not
-          
+          int priceA = 0;
+          try{
+            connectToDB();
+            PreparedStatement pst = connection.prepareStatement("SELECT * FROM flyout.passengers WHERE passengerUsername = ?");
+            pst.setString(1, cust.getUsername());
+            ResultSet rsa = pst.executeQuery();
+            if(rsa.next()){
+                priceA = (int)rsa.getDouble("passengerWallet");
+            }
+          } catch (SQLException e){
+              e.printStackTrace();
+          }
+          if(priceA >= flight.getFlightPrice()){
+                try{
+                    PreparedStatement st = connection.prepareStatement("INSERT INTO flyout.booking (flightID,passengerUsername) VALUES (?,?)");
+                    st.setString(1, flight.getFlightID());
+                    st.setString(2, cust.getUsername());
+                    st.executeUpdate();
+                    try{
+                    PreparedStatement pst = connection.prepareStatement("UPDATE flyout.passengers SET passengerWallet = ? WHERE passengerUsername = ?");
+                    pst.setDouble(1, (priceA - flight.getFlightPrice()));
+                    pst.setString(2, cust.getUsername());
+                    pst.executeUpdate();
+                    System.out.println("passenger wallet deducted successfully");
+                    TicketsDashboard p = new TicketsDashboard(cust);
+                    p.setVisible(true);
+                    dispose();
+                  } catch (SQLException e){
+                      e.printStackTrace();
+                  }
+                } catch (SQLException e){
+                    e.printStackTrace();
+                }
+          } else{
+              JOptionPane.showMessageDialog(null, "You don't have enough money, add some");
+              WalletsDashboard p = new WalletsDashboard(cust);
+              p.setVisible(true);
+              dispose();
+          }
       }else{
           JOptionPane.showMessageDialog(null, "ID isn't found");
       }
     }//GEN-LAST:event_jButton1ActionPerformed
-   
+   private static final String LOG_FILE = "log.txt";
+   private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    public static void log(String message) {
+        LocalDateTime now = LocalDateTime.now();
+        String logLine = now.format(FORMATTER) + ": " + message + System.lineSeparator();
+
+        try (FileWriter writer = new FileWriter(LOG_FILE, true)) {
+            writer.append(logLine);
+        } catch (IOException e) {
+            System.err.println("Error writing to log file: " + e.getMessage());
+        }
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;

@@ -35,16 +35,16 @@ public class TicketsDashboard extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        priceLabel = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
+        idLabel = new javax.swing.JLabel();
+        arrLabel = new javax.swing.JLabel();
+        depLabel = new javax.swing.JLabel();
+        depDateLabel = new javax.swing.JLabel();
+        arrivalDateLabel = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
 
@@ -160,9 +160,8 @@ public class TicketsDashboard extends javax.swing.JFrame {
         jLabel4.setText("Departure Date");
         jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, -1, -1));
 
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
-        jLabel5.setText("923.32 SAR");
-        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 50, -1, -1));
+        priceLabel.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
+        jPanel2.add(priceLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 50, -1, -1));
 
         jLabel6.setText("Price");
         jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 20, 40, -1));
@@ -176,25 +175,20 @@ public class TicketsDashboard extends javax.swing.JFrame {
         jLabel9.setText("Departure");
         jPanel2.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
 
-        jLabel10.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
-        jLabel10.setText("ROE124");
-        jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 120, -1, -1));
+        idLabel.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
+        jPanel2.add(idLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 120, -1, -1));
 
-        jLabel11.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
-        jLabel11.setText("Jeddah");
-        jPanel2.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 50, -1, -1));
+        arrLabel.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
+        jPanel2.add(arrLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 50, -1, -1));
 
-        jLabel12.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
-        jLabel12.setText("Riyadh");
-        jPanel2.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, -1, -1));
+        depLabel.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
+        jPanel2.add(depLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, -1, -1));
 
-        jLabel13.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
-        jLabel13.setText("21/01/2023");
-        jPanel2.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, -1, -1));
+        depDateLabel.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
+        jPanel2.add(depDateLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, -1, -1));
 
-        jLabel14.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
-        jLabel14.setText("25/01/2023");
-        jPanel2.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 120, -1, -1));
+        arrivalDateLabel.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
+        jPanel2.add(arrivalDateLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 120, -1, -1));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 170, 440, 180));
 
@@ -267,21 +261,20 @@ public class TicketsDashboard extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel arrLabel;
+    private javax.swing.JLabel arrivalDateLabel;
     private javax.swing.JPanel darkLabelCustomer;
+    private javax.swing.JLabel depDateLabel;
+    private javax.swing.JLabel depLabel;
     private javax.swing.JButton flightsButton;
     private javax.swing.JButton homeButton;
+    private javax.swing.JLabel idLabel;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -289,6 +282,7 @@ public class TicketsDashboard extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JButton logoutButton;
+    private javax.swing.JLabel priceLabel;
     private javax.swing.JButton ticketsButton;
     private javax.swing.JButton walletsButton;
     // End of variables declaration//GEN-END:variables
