@@ -173,6 +173,7 @@ public class tableForm extends javax.swing.JFrame {
                     if(rsts.next()){
                         flight.setFlightID(rsts.getString("flightID"));
                         flight.setFlightPrice(rsts.getDouble("price"));
+                        flight.setSeats(rsts.getInt("seats"));
                     }
                     disconnectFromDB();
                 } catch (SQLException e){
@@ -205,6 +206,9 @@ public class tableForm extends javax.swing.JFrame {
                     pst.setDouble(1, (priceA - flight.getFlightPrice()));
                     pst.setString(2, cust.getUsername());
                     pst.executeUpdate();
+                    
+                    PreparedStatement stp = connection.prepareStatement("UPDATE flyout.flights SET seats = ? WHERE flightID = ?");
+                    stp.setInt(1, (flight.getSeats() - - 1));
                     System.out.println("passenger wallet deducted successfully");
                     TicketsDashboard p = new TicketsDashboard(cust);
                     p.setVisible(true);
