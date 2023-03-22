@@ -184,7 +184,7 @@ public class tableForm extends javax.swing.JFrame {
                     if(rsts.next()){
                         flight.setFlightID(rsts.getString("flightID"));
                         flight.setFlightPrice(rsts.getDouble("price"));
-                        flight.setSeats(rsts.getInt("seats"));
+                        flight.setSeats(rsts.getInt("seats") - 1);
                     }
                     disconnectFromDB();
                 } catch (SQLException e){
@@ -215,7 +215,7 @@ public class tableForm extends javax.swing.JFrame {
                     st.setString(2, cust.getUsername());
                     st.executeUpdate();
                     try{
-                    PreparedStatement pst = connection.prepareStatement("UPDATE flyout.passengers SET passengerWallet = ? AND passengerHistory = ? WHERE passengerUsername = ?");
+                    PreparedStatement pst = connection.prepareStatement("UPDATE flyout.passengers SET passengerWallet = ?, passengerHistory = ? WHERE passengerUsername = ?");
                     pst.setDouble(1, (priceA - flight.getFlightPrice()));
                     history += "- You have booked a flight,";
                     pst.setString(2, history);
@@ -224,6 +224,7 @@ public class tableForm extends javax.swing.JFrame {
                     
                     PreparedStatement stp = connection.prepareStatement("UPDATE flyout.flights SET seats = ? WHERE flightID = ?");
                     stp.setInt(1, (flight.getSeats()-1));
+                    stp.setString(2, id);
                     System.out.println("passenger wallet deducted successfully");
                     log(cust.getUsername() + " have booked a flight " + flight.getFlightID());
                     TicketsDashboard p = new TicketsDashboard(cust);

@@ -1,0 +1,4 @@
+adam,FXB439,Riyadh,Jeddah,10,12,420.42
+d7lel,FXB439,Riyadh,Jeddah,10,12,420.42
+Mamdouh69,GRT920,Riyadh,Jeddah,17,12,308.42
+ThomasOmar,FXB001,Riyadh,Jeddah,11,12,400.4

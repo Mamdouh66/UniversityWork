@@ -14,7 +14,7 @@ public class Flight {
     }
 
     public int getSeats() {
-        return seats;
+        return seats-1;
     }
 
     public String getAdmin() {

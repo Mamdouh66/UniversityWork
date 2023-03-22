@@ -1,0 +1,12 @@
+FXB001,Riyadh,Jeddah,11,12,400.4
+GFE421,Riyadh,Dammam,11,12,510.42
+TEF312,Jeddah,Dubai,11,12,685.42
+TER412,Dammam,Jeddah,10,12,492.32
+HRG421,Riyadh,Qassim,12,12,301.32
+GRG943,Riyadh,Alula,18,12,430.42
+GSG324,Riyadh,Dubai,17,11,1042.42
+GEG151,Jeddah,Riyadh,18,11,424.24
+GRT920,Riyadh,Jeddah,17,12,308.42
+HSH528,Riyadh,Jeddah,15,11,401.42
+LVS847,Riyadh,Dammam,10,12,493.14
+JAV101,Dammam,Riyadh,9,11,420.42

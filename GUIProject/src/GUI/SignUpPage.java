@@ -224,7 +224,7 @@ public class SignUpPage extends javax.swing.JFrame {
             else{
                 emptyValid = true;
                 if(!phoneValid){
-                JOptionPane.showMessageDialog(null, "Phone number is not vaild\n Make sure its in this form 055******* ");
+                JOptionPane.showMessageDialog(null, "Phone number is not vaild\n Make sure its in this form 123-456-7890 ");
             }
             if (!isPasswordPowerful(new String(password))) {
             JOptionPane.showMessageDialog(null, "Your password is not powerful!\n"
@@ -270,7 +270,7 @@ public class SignUpPage extends javax.swing.JFrame {
                     rs = st.executeQuery(query);
                     if (rs.next()){
                         while(samplePhone == null)
-                            samplePhone = JOptionPane.showInputDialog("Email Already exists, pick another one");
+                            samplePhone = JOptionPane.showInputDialog("Phone number Already exists, pick another one");
                         phoneNumber = samplePhone;
                     }
                     disconnectFromDB();
@@ -308,7 +308,7 @@ public class SignUpPage extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_signUpButtonActionPerformed
     private static final String LOG_FILE = "log.txt";
-   private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     public static void log(String message) {
         LocalDateTime now = LocalDateTime.now();
         String logLine = now.format(FORMATTER) + ": " + message + System.lineSeparator();

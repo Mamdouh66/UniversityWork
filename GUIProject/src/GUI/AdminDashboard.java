@@ -173,6 +173,11 @@ public class AdminDashboard extends javax.swing.JFrame {
         departText.setBackground(new java.awt.Color(102, 102, 102));
         departText.setForeground(new java.awt.Color(255, 255, 255));
         departText.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Depart", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 15), new java.awt.Color(255, 255, 255))); // NOI18N
+        departText.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                departTextActionPerformed(evt);
+            }
+        });
         jPanel3.add(departText, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 140, 50));
 
         dDayText.setBackground(new java.awt.Color(102, 102, 102));
@@ -399,6 +404,10 @@ public class AdminDashboard extends javax.swing.JFrame {
             dispose();
         }
     }//GEN-LAST:event_addingButtonActionPerformed
+
+    private void departTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_departTextActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_departTextActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
